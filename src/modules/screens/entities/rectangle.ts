@@ -1,3 +1,5 @@
+import {CANVAS_WIDTH, CANVAS_HEIGHT} from "../../../shared/constants";
+
 export class Rectangle {
 
   private x: number;
@@ -33,13 +35,13 @@ export class Rectangle {
   }
 
   public update(): void {
-    if (this.x + this.width/2 >= 320) {
+    if (this.x + this.width/2 >= CANVAS_WIDTH) {
       this.xDirection = -1;
     } else if (this.x + this.width/2 <= 0) {
       this.xDirection = 1;
     }
 
-    if (this.y + this.height/2 >= 240) {
+    if (this.y + this.height/2 >= CANVAS_HEIGHT) {
       this.yDirection = -1;
     } else if (this.y + this.height/2 <= 0) {
       this.yDirection = 1;

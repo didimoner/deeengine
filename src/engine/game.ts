@@ -21,7 +21,7 @@ export class Game {
   private draw(): void {
     // clearing the screen with black color
     this.ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    this.ctx.fillStyle = "black";
+    this.ctx.fillStyle = "#9EAD86";
     this.ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     
     this.screenManager.draw(this.ctx);

@@ -17,7 +17,7 @@ module.exports = {
 
     output: {
         path: path.join(__dirname, '/dist'),
-        filename: 'assets/bundle.js'
+        filename: 'bundle.js'
     },
 
     module: {
@@ -26,8 +26,14 @@ module.exports = {
                 test: /\.styl$/,
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
-                    //resolve-url-loader may be chained before sass-loader if necessary
                     use: ['css-loader', 'stylus-loader']
+                })
+            },
+            {
+                test: /\.css$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: ['css-loader']
                 })
             },
             {
@@ -37,10 +43,6 @@ module.exports = {
             {
                 test: /\.html$/,
                 use: 'html-loader'
-            },
-            {
-                test: /\.css$/,
-                use: 'style-loader!css-loader'
             },
             {
                 test: /\.(woff|woff2|ttf|eot|svg)(\?.*$|$)/,
@@ -64,7 +66,7 @@ module.exports = {
             template: 'src/index.html'
         }),
 
-        new ExtractTextPlugin('assets/style.css')
+        new ExtractTextPlugin('style.css')
     ],
 
     devtool: 'source-map',
