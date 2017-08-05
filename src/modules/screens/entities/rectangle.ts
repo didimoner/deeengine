@@ -1,12 +1,10 @@
 import {CANVAS_WIDTH, CANVAS_HEIGHT} from "../../../shared/constants";
+import {Position, Size} from '../../../shared/interfaces';
 
 export class Rectangle {
 
-  private x: number;
-  private y: number;
-
-  private width: number;
-  private height: number;
+  private position: Position;
+  private size: Size;
 
   private lineWidth: number;
   private strokeStyle: string;
@@ -25,25 +23,24 @@ export class Rectangle {
     lineWidth: number = 3,
     fillStyle: string = 'black',
     strokeStyle: string = 'black') {
-      this.x = x;
-      this.y = y;
-      this.width = w;
-      this.height = h;
+      this.position = <Position>{x, y};
+      this.size = <Size>{w, h};
+
       this.lineWidth = lineWidth;
       this.fillStyle = fillStyle;
       this.strokeStyle = strokeStyle;
   }
 
   public update(): void {
-    if (this.x + this.width/2 >= CANVAS_WIDTH) {
+    if (this.position.x + this.size.w/2 >= CANVAS_WIDTH) {
       this.xDirection = -1;
-    } else if (this.x + this.width/2 <= 0) {
+    } else if (this.position.x + this.size.w/2 <= 0) {
       this.xDirection = 1;
     }
 
-    if (this.y + this.height/2 >= CANVAS_HEIGHT) {
+    if (this.position.y + this.size.h/2 >= CANVAS_HEIGHT) {
       this.yDirection = -1;
-    } else if (this.y + this.height/2 <= 0) {
+    } else if (this.position.y + this.size.h/2 <= 0) {
       this.yDirection = 1;
     }
   }
@@ -55,18 +52,18 @@ export class Rectangle {
     ctx.strokeStyle = this.strokeStyle;
     ctx.fillStyle = this.fillStyle;
     
-    ctx.translate(this.width/2 + this.x, this.height/2 + this.y);
+    ctx.translate(this.size.w/2 + this.position.x, this.size.h/2 + this.position.y);
     ctx.rotate(this.rotation * Math.PI/180);
-    ctx.translate(-this.width/2 - this.x, -this.height/2 - this.y);
+    ctx.translate(-this.size.w/2 - this.position.x, -this.size.h/2 - this.position.y);
 
-    ctx.fillRect(this.x, this.y, this.width, this.height);
+    ctx.fillRect(this.position.x, this.position.y, this.size.w, this.size.h);
 
     ctx.restore();
   }
 
   public move(x: number, y: number): void { 
-    this.x += x * this.xDirection;
-    this.y += y * this.yDirection;
+    this.position.x += x * this.xDirection;
+    this.position.y += y * this.yDirection;
   }
 
   public rotate(rotation: number): void {

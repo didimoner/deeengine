@@ -1,61 +1,51 @@
-import {CANVAS_WIDTH, CANVAS_HEIGHT} from "../../../shared/constants";
+import {TILE_SIZE} from "../../../shared/constants";
+import {Position} from '../../../shared/interfaces';
 
 const url = require("../../../img/tile.png");
 
 export class Tile {
 
-  private x: number;
-  private y: number;
+  private position: Position;
+  private opacity: number;
 
-  private width: number = 20;
-  private height: number = 20;
+  private width: number = TILE_SIZE;
+  private height: number = TILE_SIZE;
 
-  private xDirection: number = 1;
-  private yDirection: number = 1;
-
-  private rotation: number = 0;
-  private testImg: HTMLImageElement;
+  private tileImage: HTMLImageElement;
   
-  constructor(x: number, y: number) {
-      this.x = x;
-      this.y = y;
+  constructor(x: number, y: number, opacity: number = 1) {
+    this.position = <Position>{
+      x: x * this.width,
+      y: y * this.height
+    };
+    this.opacity = opacity;
 
-      this.testImg = new Image();
-      this.testImg.src = url;
+    this.tileImage = new Image();
+    this.tileImage.src = url;
   }
 
   public update(): void {
-    if (this.x + this.width/2 >= CANVAS_WIDTH) {
-      this.xDirection = -1;
-    } else if (this.x + this.width/2 <= 0) {
-      this.xDirection = 1;
-    }
 
-    if (this.y + this.height/2 >= CANVAS_HEIGHT) {
-      this.yDirection = -1;
-    } else if (this.y + this.height/2 <= 0) {
-      this.yDirection = 1;
-    }
   }
 
   public draw(ctx: CanvasRenderingContext2D): void {
     ctx.save();
-
-    ctx.translate(this.width/2 + this.x, this.height/2 + this.y);
-    ctx.rotate(this.rotation * Math.PI/180);
-    ctx.translate(-this.width/2 - this.x, -this.height/2 - this.y);
-
-    ctx.drawImage(this.testImg, this.x,this.y);
-
+    ctx.globalAlpha = this.opacity;
+    ctx.drawImage(this.tileImage, this.position.x, this.position.y);
     ctx.restore();
   }
 
-  public move(x: number, y: number): void { 
-    this.x += x * this.xDirection;
-    this.y += y * this.yDirection;
+  public setPosition(x: number, y: number): void {
+    this.position = <Position>{
+      x: x * this.width,
+      y: y * this.height
+    };
   }
 
-  public rotate(rotation: number): void {
-    this.rotation += rotation;
+  public getPosition(): Position {
+    return <Position> {
+      x: this.position.x / TILE_SIZE,
+      y: this.position.y / TILE_SIZE
+    };
   }
 }

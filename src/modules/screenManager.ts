@@ -1,5 +1,6 @@
-import {BasicScreen} from "./basicScreen";
-import {TestGame} from '../modules/screens/test';
+import {BasicScreen} from "./screens/basicScreen";
+import {TestGame} from './screens/test';
+import {TilesDemo} from './screens/tilesDemo';
 
 export class ScreenManager {
 
@@ -8,9 +9,11 @@ export class ScreenManager {
 
   constructor() {
     let testGame: TestGame = new TestGame();
+    let tileDemo: TilesDemo = new TilesDemo();
 
     this.screenList.push(testGame);
-    this.activeScreen = 0;
+    this.screenList.push(tileDemo);
+    this.activeScreen = 1;
   }
 
   public update(): void {

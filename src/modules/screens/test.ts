@@ -1,4 +1,4 @@
-import {BasicScreen} from "../basicScreen";
+import {BasicScreen} from "./basicScreen";
 import {Rectangle} from '../../modules/screens/entities/rectangle';
 import {Tile} from '../../modules/screens/entities/tile';
 
@@ -13,7 +13,7 @@ export class TestGame extends BasicScreen {
     this.myRect = new Rectangle(20, 20, 40, 20, 5, 'blue');
     this.myRect2 = new Rectangle(200, 100, 20, 30, 3, 'red');
 
-    this.myImg = new Tile(100, 200);
+    this.myImg = new Tile(1, 2);
   }
 
   public update(): void {
@@ -26,8 +26,6 @@ export class TestGame extends BasicScreen {
     this.myRect2.rotate(1.2);
 
     this.myImg.update();
-    this.myImg.move(0.5, 0.1);
-    this.myImg.rotate(1.2);
   }
 
   public draw(ctx: CanvasRenderingContext2D): void {
