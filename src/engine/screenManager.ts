@@ -1,6 +1,6 @@
-import {BasicScreen} from "./screens/basicScreen";
-import {TestGame} from './screens/test';
-import {TilesDemo} from './screens/tilesDemo';
+import {BasicScreen} from "../modules/screens/basicScreen";
+import {TestGame} from '../modules/screens/test';
+import {TilesDemo} from '../modules/screens/tilesDemo';
 
 export class ScreenManager {
 

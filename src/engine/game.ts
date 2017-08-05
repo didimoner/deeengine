@@ -1,4 +1,4 @@
-import {ScreenManager} from "../modules/screenManager";
+import {ScreenManager} from "./screenManager";
 import {CANVAS_WIDTH, CANVAS_HEIGHT} from "../shared/constants";
 
 export class Game {

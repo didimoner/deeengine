@@ -1,6 +1,6 @@
 import {BasicScreen} from "./basicScreen";
-import {Tile} from '../screens/entities/tile';
-import {TileFigure} from '../screens/entities/figure';
+import {Tile} from '../entities/tile';
+import {TileFigure} from '../entities/figure';
 
 export class TilesDemo extends BasicScreen {
   private tiles: Tile[] = [];

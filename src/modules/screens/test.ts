@@ -1,6 +1,6 @@
 import {BasicScreen} from "./basicScreen";
-import {Rectangle} from '../../modules/screens/entities/rectangle';
-import {Tile} from '../../modules/screens/entities/tile';
+import {Rectangle} from '../entities/rectangle';
+import {Tile} from '../entities/tile';
 
 export class TestGame extends BasicScreen {
   private myRect: Rectangle;

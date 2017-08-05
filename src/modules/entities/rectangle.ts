@@ -1,5 +1,5 @@
-import {CANVAS_WIDTH, CANVAS_HEIGHT} from "../../../shared/constants";
-import {Position, Size} from '../../../shared/interfaces';
+import {CANVAS_WIDTH, CANVAS_HEIGHT} from "../../shared/constants";
+import {Position, Size} from '../../shared/interfaces';
 
 export class Rectangle {
 

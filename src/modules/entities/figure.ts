@@ -1,6 +1,6 @@
-import {Tile} from '../../screens/entities/tile';
-import {TILE_SIZE} from '../../../shared/constants';
-import {Position} from '../../../shared/interfaces';
+import {Tile} from '../entities/tile';
+import {TILE_SIZE} from '../../shared/constants';
+import {Position} from '../../shared/interfaces';
 
 export class TileFigure {
 

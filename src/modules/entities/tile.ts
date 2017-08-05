@@ -1,7 +1,7 @@
-import {TILE_SIZE} from "../../../shared/constants";
-import {Position} from '../../../shared/interfaces';
+import {TILE_SIZE} from "../../shared/constants";
+import {Position} from '../../shared/interfaces';
 
-const url = require("../../../img/tile.png");
+const url = require("../../img/tile.png");
 
 export class Tile {
 
