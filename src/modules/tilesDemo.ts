@@ -24,9 +24,7 @@ export class TilesDemo implements GameScene {
   }
 
   public update(): void {
-    for (let tile of this.tiles) {
-      tile.update();
-    }
+
   }
 
   public draw(ctx: CanvasRenderingContext2D): void {

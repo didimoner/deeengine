@@ -12,3 +12,8 @@ export interface GameScene {
   update(): void;
   draw(ctx: CanvasRenderingContext2D): void;
 }
+
+export interface GameListElement {
+  title: string;
+  module: GameScene;
+}
