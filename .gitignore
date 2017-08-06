@@ -62,3 +62,4 @@ package-lock.json
 *.db
 
 dist/
+.idea/

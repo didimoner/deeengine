@@ -1,14 +1,12 @@
-import {BasicScreen} from "./basicScreen";
-import {Tile} from '../entities/tile';
-import {TileFigure} from '../entities/figure';
+import {GameScene} from '../shared/interfaces';
+import {Tile} from '../engine/entities/tile';
+import {TileFigure} from '../engine/entities/figure';
 
-export class TilesDemo extends BasicScreen {
+export class TilesDemo implements GameScene {
   private tiles: Tile[] = [];
   private figure: TileFigure;
 
   constructor() {
-    super();
-
     for (let i = 0; i < 10; i++) {
       for (let j = 0; j < 20; j++) {
         this.tiles.push(new Tile(i, j, 0.1));

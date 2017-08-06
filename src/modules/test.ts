@@ -1,15 +1,13 @@
-import {BasicScreen} from "./basicScreen";
-import {Rectangle} from '../entities/rectangle';
-import {Tile} from '../entities/tile';
+import {GameScene} from '../shared/interfaces';
+import {Rectangle} from '../engine/entities/rectangle';
+import {Tile} from '../engine/entities/tile';
 
-export class TestGame extends BasicScreen {
+export class TestGame implements GameScene {
   private myRect: Rectangle;
   private myRect2: Rectangle;
   private myImg: Tile;
 
   constructor() {
-    super();
-
     this.myRect = new Rectangle(20, 20, 40, 20, 5, 'blue');
     this.myRect2 = new Rectangle(200, 100, 20, 30, 3, 'red');
 

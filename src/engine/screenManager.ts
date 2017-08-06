@@ -1,10 +1,10 @@
-import {BasicScreen} from "../modules/screens/basicScreen";
-import {TestGame} from '../modules/screens/test';
-import {TilesDemo} from '../modules/screens/tilesDemo';
+import {GameScene} from '../shared/interfaces';
+import {TestGame} from '../modules/test';
+import {TilesDemo} from '../modules/tilesDemo';
 
 export class ScreenManager {
 
-  private screenList: BasicScreen[] = [];
+  private screenList: GameScene[] = [];
   private activeScreen: number;
 
   constructor() {
