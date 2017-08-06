@@ -14,6 +14,12 @@ export class TestGame implements GameScene {
     this.myImg = new Tile(1, 2);
   }
 
+  public handleKeyboardInput(event: KeyboardEvent): void {
+    if (event.keyCode === 27) {
+      document.dispatchEvent(new CustomEvent('gameStateEvent', { detail: -1 }))
+    }
+  }
+
   public update(): void {
     this.myRect.update();
     this.myRect.move(0.5, 0.1);

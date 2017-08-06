@@ -12,6 +12,8 @@ export class Game {
 
     this.ctx = canvas.getContext('2d');
     this.screenManager = new ScreenManager();
+
+    document.addEventListener('keydown', this.screenManager.handleKeyboardInput.bind(this.screenManager));
   }
 
   private update(): void {

@@ -1,29 +1,38 @@
 import {GameScene} from '../shared/interfaces';
-import {TestGame} from '../modules/test';
-import {TilesDemo} from '../modules/tilesDemo';
 import {GameMenu} from '../modules/gameMenu';
+import {GAME_LIST} from '../modules/gameList';
 
 export class ScreenManager {
 
-  private screenList: GameScene[] = [];
-  private activeScreen: number;
+  private activeScreen: GameScene;
+  private gameMenu: GameScene;
 
   constructor() {
-    let testGame: TestGame = new TestGame();
-    let tileDemo: TilesDemo = new TilesDemo();
-    let gameMenu: GameMenu = new GameMenu();
+    this.gameMenu = new GameMenu();
+    this.activeScreen = this.gameMenu;
 
-    this.screenList.push(testGame);
-    this.screenList.push(tileDemo);
-    this.screenList.push(gameMenu);
-    this.activeScreen = 2;
+    document.addEventListener('gameStateEvent', this.changeScreen.bind(this));
+  }
+
+  public handleKeyboardInput(event: KeyboardEvent) {
+    this.activeScreen.handleKeyboardInput(event);
   }
 
   public update(): void {
-    this.screenList[this.activeScreen].update();
+    this.activeScreen.update();
   }
 
   public draw(ctx: CanvasRenderingContext2D): void {
-    this.screenList[this.activeScreen].draw(ctx);
+    this.activeScreen.draw(ctx);
+  }
+
+  private changeScreen(event: CustomEvent) {
+    let gameIndex: number = event.detail;
+
+    if (gameIndex === -1) {
+      this.activeScreen = this.gameMenu;
+    } else {
+      this.activeScreen = new GAME_LIST[gameIndex].module;
+    }
   }
 }

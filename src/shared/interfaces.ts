@@ -9,6 +9,7 @@ export interface Size {
 }
 
 export interface GameScene {
+  handleKeyboardInput(event: KeyboardEvent): void;
   update(): void;
   draw(ctx: CanvasRenderingContext2D): void;
 }

@@ -31,7 +31,7 @@ export class Text {
     ctx.save();
     ctx.font = `${this.fontSize}px ${this.fontName}, verdana, sans-serif`;
     ctx.fillStyle = this.fontColor;
-    ctx.fillText(this.text, this.position.x, this.position.y);
+    ctx.fillText(this.text, this.position.x, this.position.y + this.fontSize / 2 + 6);
     ctx.restore();
   }
 

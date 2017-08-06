@@ -1,38 +1,76 @@
 import {GameScene, GameListElement} from '../shared/interfaces';
-import {CANVAS_HEIGHT} from '../shared/constants';
+import {CANVAS_HEIGHT, TILE_SIZE} from '../shared/constants';
 import {GAME_LIST} from './gameList';
 import {Text} from '../engine/entities/text';
+import {Tile} from '../engine/entities/tile';
 
 export class GameMenu implements GameScene {
 
   private fontSize: number;
+  private menuItemsHeight: number;
   private menuItems: Text[] = [];
+  private pointer: Tile;
+  private activeItem: number;
 
   constructor() {
     this.fontSize = 36;
+    this.activeItem = 0;
     this.init();
   }
 
   private init() {
-    const itemsSize = this.fontSize * (GAME_LIST.length - 1);
+    this.menuItemsHeight = this.fontSize * (GAME_LIST.length - 1);
 
     GAME_LIST.forEach((element, index) => {
       this.menuItems.push(new Text(
         element.title, 
-        60, 
-        index * this.fontSize + (CANVAS_HEIGHT- itemsSize) / 2,
+        2 * TILE_SIZE, 
+        index * this.fontSize + (CANVAS_HEIGHT - this.menuItemsHeight) / 2,
         this.fontSize
       ));
     });
+
+    this.pointer = new Tile(0, 0);
   }
 
-  update(): void {
+  public handleKeyboardInput(event: KeyboardEvent): void {
+    switch (event.keyCode) {
+      case 38:
+        if (this.activeItem !== 0) {
+          this.activeItem--;
+        }
+        break;
 
+      case 40:
+        if (this.activeItem < this.menuItems.length - 1) {
+          this.activeItem++;
+        }
+        break;
+
+      case 32:
+      case 13:
+        this.dispatchScreen();
+        break;
+    }
   }
 
-  draw(ctx: CanvasRenderingContext2D): void {
+  public update(): void {
+    this.pointer.setPosition(0, (this.activeItem * this.fontSize + (CANVAS_HEIGHT - this.menuItemsHeight) / 2) / TILE_SIZE);
+  }
+
+  public draw(ctx: CanvasRenderingContext2D): void {
     for (let item of this.menuItems) {
       item.draw(ctx);
     }
+
+    this.pointer.draw(ctx);
+  }
+
+  private dispatchScreen() {
+    let event: CustomEvent = new CustomEvent('gameStateEvent', {
+      detail: this.activeItem
+    });
+
+    document.dispatchEvent(event);
   }
 }
