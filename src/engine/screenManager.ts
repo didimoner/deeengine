@@ -1,5 +1,5 @@
 import {GameScreen} from '../shared/interfaces';
-import {GameMenu} from '../modules/gameMenu';
+import {GameMenu} from '../modules/screens/gameMenu';
 import {GAME_LIST} from '../modules/gameList';
 
 export class ScreenManager {

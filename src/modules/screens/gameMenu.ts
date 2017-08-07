@@ -1,8 +1,8 @@
-import {GameScreen, GameListElement} from '../shared/interfaces';
-import {CANVAS_HEIGHT, TILE_SIZE} from '../shared/constants';
-import {GAME_LIST} from './gameList';
-import {Text} from '../engine/entities/text';
-import {Tile} from '../engine/entities/tile';
+import {GameScreen, GameListElement} from '../../shared/interfaces';
+import {CANVAS_HEIGHT, TILE_SIZE} from '../../shared/constants';
+import {GAME_LIST} from '../gameList';
+import {Text} from '../../engine/entities/text';
+import {Tile} from '../../engine/entities/tile';
 
 export class GameMenu implements GameScreen {
 
@@ -18,7 +18,7 @@ export class GameMenu implements GameScreen {
     this.init();
   }
 
-  private init() {
+  private init(): void {
     this.menuItemsHeight = this.fontSize * (GAME_LIST.length - 1);
 
     GAME_LIST.forEach((element, index) => {
@@ -66,7 +66,7 @@ export class GameMenu implements GameScreen {
     this.pointer.draw(ctx);
   }
 
-  private dispatchScreen() {
+  private dispatchScreen(): void {
     let event: CustomEvent = new CustomEvent('gameStateEvent', {
       detail: this.activeItem
     });

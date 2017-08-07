@@ -1,6 +1,6 @@
-import {GameScreen} from '../shared/interfaces';
-import {Rectangle} from '../engine/entities/rectangle';
-import {Tile} from '../engine/entities/tile';
+import {GameScreen} from '../../shared/interfaces';
+import {Rectangle} from '../../engine/entities/rectangle';
+import {Tile} from '../../engine/entities/tile';
 
 export class TestGame implements GameScreen {
   

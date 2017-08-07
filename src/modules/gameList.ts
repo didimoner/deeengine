@@ -1,5 +1,5 @@
-import {TilesDemo} from "./tilesDemo";
-import {TestGame} from "./test";
+import {TilesDemo} from "./screens/tilesDemo";
+import {TestGame} from "./screens/test";
 
 export const GAME_LIST = [
   {title: 'Test Game', module: TestGame},

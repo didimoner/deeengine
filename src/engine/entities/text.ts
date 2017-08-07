@@ -2,21 +2,21 @@ import {Position} from '../../shared/interfaces';
 
 export class Text {
   
-  private text: string;
+  private value: string;
   private position: Position;
   private fontSize: number;
   private fontName: string;
   private fontColor: string;
 
   constructor(
-    text: string,
+    value: string,
     x: number,
     y: number,
     fontSize: number, 
     fontName: string = 'Digital-7', 
     fontColor: string = 'black'
   ) {
-    this.text = text;
+    this.value = value;
     this.position = <Position>{x, y};
     this.fontSize = fontSize;
     this.fontName = fontName;
@@ -31,7 +31,7 @@ export class Text {
     ctx.save();
     ctx.font = `${this.fontSize}px ${this.fontName}, verdana, sans-serif`;
     ctx.fillStyle = this.fontColor;
-    ctx.fillText(this.text, this.position.x, this.position.y + this.fontSize / 2 + 6);
+    ctx.fillText(this.value, this.position.x, this.position.y + this.fontSize / 2 + 6);
     ctx.restore();
   }
 
@@ -41,5 +41,12 @@ export class Text {
 
   public getPosition(): Position {
     return this.position;
+  }
+
+  public setValue(value: string): void {
+    this.value = value;
+  }
+  public getValue(): string {
+    return this.value;
   }
 }
