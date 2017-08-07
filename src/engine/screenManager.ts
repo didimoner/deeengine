@@ -1,11 +1,11 @@
-import {GameScene} from '../shared/interfaces';
+import {GameScreen} from '../shared/interfaces';
 import {GameMenu} from '../modules/gameMenu';
 import {GAME_LIST} from '../modules/gameList';
 
 export class ScreenManager {
 
-  private activeScreen: GameScene;
-  private gameMenu: GameScene;
+  private activeScreen: GameScreen;
+  private gameMenu: GameScreen;
 
   constructor() {
     this.gameMenu = new GameMenu();

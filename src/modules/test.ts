@@ -1,8 +1,9 @@
-import {GameScene} from '../shared/interfaces';
+import {GameScreen} from '../shared/interfaces';
 import {Rectangle} from '../engine/entities/rectangle';
 import {Tile} from '../engine/entities/tile';
 
-export class TestGame implements GameScene {
+export class TestGame implements GameScreen {
+  
   private myRect: Rectangle;
   private myRect2: Rectangle;
   private myImg: Tile;

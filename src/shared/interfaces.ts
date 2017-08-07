@@ -8,7 +8,7 @@ export interface Size {
   h: number;
 }
 
-export interface GameScene {
+export interface GameScreen {
   handleKeyboardInput(event: KeyboardEvent): void;
   update(): void;
   draw(ctx: CanvasRenderingContext2D): void;
@@ -16,5 +16,5 @@ export interface GameScene {
 
 export interface GameListElement {
   title: string;
-  module: GameScene;
+  module: GameScreen;
 }

@@ -23,11 +23,11 @@ export class Text {
     this.fontColor = fontColor;
   }
 
-  update(): void {
+  public update(): void {
 
   }
 
-  draw(ctx: CanvasRenderingContext2D): void {
+  public draw(ctx: CanvasRenderingContext2D): void {
     ctx.save();
     ctx.font = `${this.fontSize}px ${this.fontName}, verdana, sans-serif`;
     ctx.fillStyle = this.fontColor;

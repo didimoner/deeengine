@@ -1,10 +1,10 @@
-import {GameScene, GameListElement} from '../shared/interfaces';
+import {GameScreen, GameListElement} from '../shared/interfaces';
 import {CANVAS_HEIGHT, TILE_SIZE} from '../shared/constants';
 import {GAME_LIST} from './gameList';
 import {Text} from '../engine/entities/text';
 import {Tile} from '../engine/entities/tile';
 
-export class GameMenu implements GameScene {
+export class GameMenu implements GameScreen {
 
   private fontSize: number;
   private menuItemsHeight: number;

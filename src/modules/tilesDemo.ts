@@ -1,8 +1,9 @@
-import {GameScene} from '../shared/interfaces';
+import {GameScreen} from '../shared/interfaces';
 import {Tile} from '../engine/entities/tile';
 import {TileFigure} from '../engine/entities/figure';
 
-export class TilesDemo implements GameScene {
+export class TilesDemo implements GameScreen {
+  
   private tiles: Tile[] = [];
   private figures: TileFigure[] = [];
 
@@ -15,7 +16,7 @@ export class TilesDemo implements GameScene {
 
     let pattern: string[] = [
       ' 9 ', 
-      '919', 
+      '999', 
       ' 9',
       '9 9'
     ];
