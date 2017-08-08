@@ -21,7 +21,7 @@ export class TestGame implements GameScreen {
     }
   }
 
-  public update(): void {
+  public update(timeDelta: number): void {
     this.myRect.update();
     this.myRect.move(0.5, 0.1);
     this.myRect.rotate(0.8);

@@ -8,9 +8,19 @@ export interface Size {
   h: number;
 }
 
+export interface Direction {
+  x: number;
+  y: number;
+}
+
+export interface Entity {
+  update(timeDelta: number): void;
+  draw(ctx: CanvasRenderingContext2D): void;
+}
+
 export interface GameScreen {
   handleKeyboardInput(event: KeyboardEvent): void;
-  update(): void;
+  update(timeDelta: number): void;
   draw(ctx: CanvasRenderingContext2D): void;
 }
 

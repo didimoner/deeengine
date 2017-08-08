@@ -18,8 +18,8 @@ export class ScreenManager {
     this.activeScreen.handleKeyboardInput(event);
   }
 
-  public update(): void {
-    this.activeScreen.update();
+  public update(timeDelta: number): void {
+    this.activeScreen.update(timeDelta);
   }
 
   public draw(ctx: CanvasRenderingContext2D): void {

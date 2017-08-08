@@ -44,7 +44,7 @@ export class TilesDemo implements GameScreen {
     }
   }
 
-  public update(): void {
+  public update(timeDelta: number): void {
 
   }
 

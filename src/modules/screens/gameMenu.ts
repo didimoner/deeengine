@@ -54,7 +54,7 @@ export class GameMenu implements GameScreen {
     }
   }
 
-  public update(): void {
+  public update(timeDelta: number): void {
     this.pointer.setPosition(0, (this.activeItem * this.fontSize + (CANVAS_HEIGHT - this.menuItemsHeight) / 2) / TILE_SIZE);
   }
 
