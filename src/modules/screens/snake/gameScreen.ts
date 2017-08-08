@@ -16,14 +16,34 @@ export class SnakeGame implements GameScreen {
 
   constructor() {
     this.clock = 0;
-    this.speed = 0.5;
+    this.speed = 0.2;
 
     this.snake = new Snake();
     this.food = new Tile(0, 0, 0.6);
   }
 
   public handleKeyboardInput(event: KeyboardEvent): void {
+    switch (event.keyCode) {
+      case 37:
+        this.snake.setDirection(-1, 0);
+        break;
+      
+      case 38:
+        this.snake.setDirection(0, -1);
+        break;
 
+      case 39:
+        this.snake.setDirection(1, 0);
+        break;
+
+      case 40:
+        this.snake.setDirection(0, 1);
+        break;
+
+      case 27:
+        document.dispatchEvent(new CustomEvent('gameStateEvent', {detail: -1}));
+        break;
+    }
   }
 
   public update(timeDelta: number): void {
