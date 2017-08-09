@@ -1,22 +1,34 @@
-import {Text} from '../engine/entities/text';
-import {GAME_FIELD_WIDTH, TILE_SIZE} from '../shared/constants';
+import {Text} from '../engine/primitives/text';
+import {Line} from '../engine/primitives/line';
+import {GAME_FIELD_WIDTH, GAME_FIELD_HEIGHT, TILE_SIZE} from '../shared/constants';
 
 export class HUD {
 
   private score: HudElement;
   private level: HudElement;
   private speed: HudElement;
+  private separator: Line;
 
   constructor() {
     this.score = new HudElement('Score', 0, 0);
     this.level = new HudElement('Level', 1, 14 * TILE_SIZE);
     this.speed = new HudElement('Speed', 1, 17 * TILE_SIZE);
+
+    this.separator = new Line(
+      GAME_FIELD_WIDTH * TILE_SIZE, 
+      0, 
+      GAME_FIELD_WIDTH * TILE_SIZE, 
+      GAME_FIELD_HEIGHT * TILE_SIZE, 
+      1.1, 
+      0.8);
   }
 
   public draw(ctx: CanvasRenderingContext2D): void {
     this.score.draw(ctx);
     this.level.draw(ctx);
     this.speed.draw(ctx);
+
+    this.separator.draw(ctx);
   }
 
   public setScore(value: number): void {

@@ -1,5 +1,5 @@
-import {Entity, Position, Direction} from '../../../shared/interfaces';
-import {Tile} from '../../../engine/entities/tile';
+import {Entity, Coordinates, Direction} from '../../../shared/interfaces';
+import {Tile} from '../../../engine/primitives/tile';
 
 const QUEUE_LENGTH = 2;
 
@@ -8,7 +8,7 @@ export class Snake implements Entity {
   private head: Tile;
   private tail: Tile[] = [];
 
-  private position: Position;
+  private position: Coordinates;
   private direction: Direction;
   private directionQueue: Direction[] = [];
  
@@ -30,7 +30,7 @@ export class Snake implements Entity {
       new Tile(0, 0, 0.8)
     );
 
-    this.position = <Position>{x: 0, y: 0};
+    this.position = <Coordinates>{x: 0, y: 0};
     this.direction = <Direction>{x: 0, y: 0};
   }
 
@@ -51,9 +51,9 @@ export class Snake implements Entity {
   }
 
   public setPosition(x: number, y: number): void {
-    this.position = <Position>{x, y};
+    this.position = <Coordinates>{x, y};
   }
-  public getPosition(): Position {
+  public getPosition(): Coordinates {
     return this.position;
   }
 
@@ -77,10 +77,10 @@ export class Snake implements Entity {
   }
 
   private updatePosition(): void {
-    let headLastPos: Position = this.head.getPosition();
+    let headLastPos: Coordinates = this.head.getPosition();
 
     for (let i = this.tail.length - 1; i > 0; i--) {
-      let nextPos: Position = this.tail[i-1].getPosition();
+      let nextPos: Coordinates = this.tail[i-1].getPosition();
       this.tail[i].setPosition(nextPos.x, nextPos.y);
     }
     this.tail[0].setPosition(headLastPos.x, headLastPos.y);
