@@ -1,6 +1,8 @@
 import {Entity, Position, Direction} from '../../../shared/interfaces';
 import {Tile} from '../../../engine/entities/tile';
 
+const QUEUE_LENGTH = 2;
+
 export class Snake implements Entity {
 
   private head: Tile;
@@ -8,6 +10,7 @@ export class Snake implements Entity {
 
   private position: Position;
   private direction: Direction;
+  private directionQueue: Direction[] = [];
  
   constructor() {
     this.head = new Tile(0, 0);
@@ -15,14 +18,27 @@ export class Snake implements Entity {
       new Tile(0, 0, 0.8),
       new Tile(0, 0, 0.8),
       new Tile(0, 0, 0.8),
+      new Tile(0, 0, 0.8),
+      new Tile(0, 0, 0.8),
+      new Tile(0, 0, 0.8),
+      new Tile(0, 0, 0.8),
+      new Tile(0, 0, 0.8),
+      new Tile(0, 0, 0.8),
+      new Tile(0, 0, 0.8),
+      new Tile(0, 0, 0.8),
+      new Tile(0, 0, 0.8),
       new Tile(0, 0, 0.8)
     );
 
     this.position = <Position>{x: 0, y: 0};
-    this.direction = <Direction>{x: 1, y: 0};
+    this.direction = <Direction>{x: 0, y: 0};
   }
 
   public update(timeDelta: number): void {
+    if (this.directionQueue.length) {
+      this.direction = this.directionQueue.pop();
+    }
+    
     this.updatePosition();
   }
 
@@ -42,8 +58,13 @@ export class Snake implements Entity {
   }
 
   public setDirection(x: number, y: number): void {
-    this.direction = <Direction>{x, y};
+    if (this.directionQueue.length > QUEUE_LENGTH) {
+      this.directionQueue.pop();
+    }
+
+    this.directionQueue.unshift(<Direction>{x, y});
   } 
+  
   public getDirection(): Direction {
     return this.direction;
   }
