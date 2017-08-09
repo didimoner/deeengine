@@ -50,14 +50,7 @@ export class SnakeGame implements GameScreen {
     this.clock += timeDelta;
 
     if (this.clock > CLOCK_RESET_TIME * this.speed) {
-      const snakePos: Position = this.snake.getPosition();
-      const snakeDir: Direction = this.snake.getDirection();
-
-      this.snake.setPosition(
-        snakePos.x + 1 * snakeDir.x, 
-        snakePos.y + 1 * snakeDir.y
-      );
-
+      this.snake.move();
       this.snake.update(timeDelta);
 
       this.clock = 0;

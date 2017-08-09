@@ -1,14 +1,13 @@
 {
-  "name": "test",
+  "name": "DeeEngine",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "build": "rimraf dist && cross-env NODE_ENV=production webpack --progress --colors",
-    "serve": "webpack-dev-server --progress --colors",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "serve": "webpack-dev-server --progress --colors"
   },
-  "author": "",
+  "author": "Dmitry Ibragimov aka didimoner",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^8.0.19",

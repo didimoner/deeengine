@@ -8,7 +8,7 @@ export class Snake implements Entity {
 
   private position: Position;
   private direction: Direction;
-  
+ 
   constructor() {
     this.head = new Tile(0, 0);
     this.tail.push(
@@ -23,7 +23,7 @@ export class Snake implements Entity {
   }
 
   public update(timeDelta: number): void {
-    this.move();
+    this.updatePosition();
   }
 
   public draw(ctx: CanvasRenderingContext2D): void {
@@ -48,7 +48,14 @@ export class Snake implements Entity {
     return this.direction;
   }
 
-  private move(): void {
+  public move(): void {
+    this.setPosition(
+      this.position.x + 1 * this.direction.x, 
+      this.position.y + 1 * this.direction.y
+    );
+  }
+
+  private updatePosition(): void {
     let headLastPos: Position = this.head.getPosition();
 
     for (let i = this.tail.length - 1; i > 0; i--) {
