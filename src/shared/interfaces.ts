@@ -8,6 +8,11 @@ export interface Size {
   h: number;
 }
 
+export interface HitBox {
+  pos: Coordinates;
+  size: Size;
+}
+
 export interface Direction {
   x: number;
   y: number;

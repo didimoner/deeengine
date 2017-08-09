@@ -1,4 +1,4 @@
-import {Entity, Coordinates, Direction} from '../../../shared/interfaces';
+import {Entity, Coordinates, Direction, HitBox} from '../../../shared/interfaces';
 import {Tile} from '../../../engine/primitives/tile';
 
 const QUEUE_LENGTH = 2;
@@ -74,6 +74,10 @@ export class Snake implements Entity {
       this.position.x + 1 * this.direction.x, 
       this.position.y + 1 * this.direction.y
     );
+  }
+
+  public getHitBox(): HitBox {
+    return <HitBox>{pos: this.position, size: this.head.getSize()};
   }
 
   private updatePosition(): void {

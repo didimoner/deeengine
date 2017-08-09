@@ -1,5 +1,5 @@
 import {TILE_SIZE} from "../../shared/constants";
-import {Coordinates} from '../../shared/interfaces';
+import {Coordinates, Size} from '../../shared/interfaces';
 
 const url = require("../../img/tile.png");
 
@@ -47,5 +47,9 @@ export class Tile {
       x: this.position.x / TILE_SIZE,
       y: this.position.y / TILE_SIZE
     };
+  }
+
+  public getSize(): Size {
+    return <Size>{w: this.width, h: this.height};
   }
 }
