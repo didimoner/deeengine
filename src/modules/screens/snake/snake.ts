@@ -1,9 +1,11 @@
 import {Entity, Coordinates, Direction, HitBox} from '../../../shared/interfaces';
 import {Tile} from '../../../engine/primitives/tile';
+import {BorderBox} from '../../../engine/primitives/border-box';
+import {TILE_SIZE} from '../../../shared/constants';
 
 const QUEUE_LENGTH = 2;
 
-export class Snake implements Entity {
+export class Snake extends BorderBox implements Entity {
 
   private head: Tile;
   private tail: Tile[] = [];
@@ -13,16 +15,12 @@ export class Snake implements Entity {
   private directionQueue: Direction[] = [];
  
   constructor() {
+    super();
+
     this.head = new Tile(0, 0);
+    this.hitBox.size = this.head.getSize();
+
     this.tail.push(
-      new Tile(0, 0, 0.8),
-      new Tile(0, 0, 0.8),
-      new Tile(0, 0, 0.8),
-      new Tile(0, 0, 0.8),
-      new Tile(0, 0, 0.8),
-      new Tile(0, 0, 0.8),
-      new Tile(0, 0, 0.8),
-      new Tile(0, 0, 0.8),
       new Tile(0, 0, 0.8),
       new Tile(0, 0, 0.8),
       new Tile(0, 0, 0.8),
@@ -31,6 +29,7 @@ export class Snake implements Entity {
     );
 
     this.position = <Coordinates>{x: 0, y: 0};
+    this.hitBox.pos = this.position;
     this.direction = <Direction>{x: 0, y: 0};
   }
 
@@ -52,7 +51,12 @@ export class Snake implements Entity {
 
   public setPosition(x: number, y: number): void {
     this.position = <Coordinates>{x, y};
+    this.hitBox.pos = <Coordinates>{
+      x: this.position.x * TILE_SIZE,
+      y: this.position.y * TILE_SIZE 
+    };
   }
+
   public getPosition(): Coordinates {
     return this.position;
   }

@@ -1,6 +1,7 @@
 import {GameScreen, Coordinates, Direction} from '../../../shared/interfaces';
 import {Tile} from '../../../engine/primitives/tile';
 import {Snake} from './snake';
+import {Food} from './food';
 import {TileBackground} from '../../tile-background';
 import {HUD} from '../../hud';
 
@@ -16,7 +17,7 @@ export class SnakeGame implements GameScreen {
   private score: number;
 
   private snake: Snake;
-  private food: Tile;
+  private food: Food;
 
   private lastKeyCode: number;
 
@@ -26,11 +27,15 @@ export class SnakeGame implements GameScreen {
 
     this.clock = 0;
     this.speed = 10;
+    this.score = 0;
 
     this.snake = new Snake();
-    this.food = new Tile(0, 0, 0.6);
+    this.food = new Food();
 
     this.hud.setSpeed(this.speed);
+    this.hud.setScore(this.score);
+
+    this.food.setPosition(0, 5);
   }
 
   public handleKeyboardInput(event: KeyboardEvent): void {
@@ -88,6 +93,13 @@ export class SnakeGame implements GameScreen {
 
       this.clock = 0;
     }
+
+    if (this.snake.intersects(this.food.getHitBox())) {
+      console.log('Intersects!!!');
+      this.score += 5;
+      this.hud.setScore(this.score);
+    }
+    
   }
   
   public draw(ctx: CanvasRenderingContext2D): void {

@@ -1,14 +1,13 @@
-import {HitBox} from '../../shared/interfaces';
+import {HitBox, Coordinates, Size} from '../../shared/interfaces';
 
 export class BorderBox {
 
-  // TODO: initialize this!
   protected hitBox: HitBox;
 
   constructor() {
     this.hitBox = <HitBox>{
       pos: {x: 0, y: 0},
-      size: {w: 0, h: 0}
+      size: {w: 0, h: 0} 
     };
   }
 
@@ -37,5 +36,9 @@ export class BorderBox {
     }
 
     return xOverlap && yOverlap;
+  }
+
+  public getHitBox(): HitBox {
+    return this.hitBox;
   }
 }
