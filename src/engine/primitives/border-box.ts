@@ -16,21 +16,21 @@ export class BorderBox {
     let yOverlap: boolean = false;
 
     if (this.hitBox.pos.x < object.pos.x) {
-      if ((this.hitBox.pos.x + this.hitBox.size.w) >= object.pos.x) {
+      if ((this.hitBox.pos.x + this.hitBox.size.w) > object.pos.x) {
         xOverlap = true;
       }
     } else {
-      if (this.hitBox.pos.x <= (object.pos.x + object.size.w)) {
+      if (this.hitBox.pos.x < (object.pos.x + object.size.w)) {
         xOverlap = true;
       }
     }
 
     if (this.hitBox.pos.y < object.pos.y) {
-      if ((this.hitBox.pos.y + this.hitBox.size.h) >= object.pos.y) {
+      if ((this.hitBox.pos.y + this.hitBox.size.h) > object.pos.y) {
         yOverlap = true;
       }
     } else {
-      if (this.hitBox.pos.y <= (object.pos.y + object.size.h)) {
+      if (this.hitBox.pos.y < (object.pos.y + object.size.h)) {
         yOverlap = true;
       }
     }

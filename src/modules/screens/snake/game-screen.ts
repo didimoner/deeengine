@@ -1,4 +1,5 @@
 import {GameScreen, Coordinates, Direction} from '../../../shared/interfaces';
+import {GAME_FIELD_WIDTH, GAME_FIELD_HEIGHT} from '../../../shared/constants';
 import {Tile} from '../../../engine/primitives/tile';
 import {Snake} from './snake';
 import {Food} from './food';
@@ -95,9 +96,11 @@ export class SnakeGame implements GameScreen {
     }
 
     if (this.snake.intersects(this.food.getHitBox())) {
-      console.log('Intersects!!!');
       this.score += 5;
       this.hud.setScore(this.score);
+
+      this.replaceFood();
+      this.snake.grow();
     }
     
   }
@@ -108,5 +111,25 @@ export class SnakeGame implements GameScreen {
 
     this.food.draw(ctx);
     this.snake.draw(ctx);
+  }
+
+  private replaceFood(): void {
+    let currPos: Coordinates = this.food.getPosition();
+
+    let xExclude: number[] = [this.snake.getPosition().x, ...this.snake.getSnakeTilePositions().map(e => e.x)];
+    let yExclude: number[] = [this.snake.getPosition().y, ...this.snake.getSnakeTilePositions().map(e => e.y)];
+
+    let x: number = this.getRandomNumber(0, GAME_FIELD_WIDTH, xExclude);
+    let y: number = this.getRandomNumber(0, GAME_FIELD_HEIGHT, yExclude);
+    
+    console.log('set: ', x, y);
+    this.food.setPosition(x, y);
+  }
+
+  private getRandomNumber(min: number, max: number, exclude: number[]): number {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+
+    return Math.floor(Math.random() * (max - min)) + min;
   }
 }

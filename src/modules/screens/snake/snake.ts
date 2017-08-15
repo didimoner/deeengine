@@ -22,9 +22,6 @@ export class Snake extends BorderBox implements Entity {
 
     this.tail.push(
       new Tile(0, 0, 0.8),
-      new Tile(0, 0, 0.8),
-      new Tile(0, 0, 0.8),
-      new Tile(0, 0, 0.8),
       new Tile(0, 0, 0.8)
     );
 
@@ -82,6 +79,18 @@ export class Snake extends BorderBox implements Entity {
 
   public getHitBox(): HitBox {
     return <HitBox>{pos: this.position, size: this.head.getSize()};
+  }
+
+  public getSnakeTilePositions(): Coordinates[] {
+    let result: Coordinates[] = this.tail.map(e => e.getPosition());
+    result.unshift(this.head.getPosition());
+
+    return result;
+  }
+
+  public grow(): void {
+    let lastTailPos: Coordinates = this.tail[this.tail.length - 1].getPosition();
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, 0.8));
   }
 
   private updatePosition(): void {
