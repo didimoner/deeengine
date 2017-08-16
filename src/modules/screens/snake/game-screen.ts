@@ -102,7 +102,6 @@ export class SnakeGame implements GameScreen {
       this.replaceFood();
       this.snake.grow();
     }
-    
   }
   
   public draw(ctx: CanvasRenderingContext2D): void {
@@ -114,19 +113,25 @@ export class SnakeGame implements GameScreen {
   }
 
   private replaceFood(): void {
-    let currPos: Coordinates = this.food.getPosition();
+    let exclude: Coordinates[] = [this.snake.getPosition(), ...this.snake.getSnakeTilePositions()];
 
-    let xExclude: number[] = [this.snake.getPosition().x, ...this.snake.getSnakeTilePositions().map(e => e.x)];
-    let yExclude: number[] = [this.snake.getPosition().y, ...this.snake.getSnakeTilePositions().map(e => e.y)];
-
-    let x: number = this.getRandomNumber(0, GAME_FIELD_WIDTH, xExclude);
-    let y: number = this.getRandomNumber(0, GAME_FIELD_HEIGHT, yExclude);
+    let x: number = 0;
+    let y: number = 0;
     
-    console.log('set: ', x, y);
+    for (let i = 0; i < GAME_FIELD_WIDTH * GAME_FIELD_HEIGHT; i++) {
+      x = this.getRandomNumber(0, GAME_FIELD_WIDTH);
+      y = this.getRandomNumber(0, GAME_FIELD_HEIGHT);
+
+      if (exclude.filter(pos => pos.x === x && pos.y === y).length <= 0) {
+        console.log('OK!', i);
+        break;
+      } 
+    }
+
     this.food.setPosition(x, y);
   }
 
-  private getRandomNumber(min: number, max: number, exclude: number[]): number {
+  private getRandomNumber(min: number, max: number): number {
     min = Math.ceil(min);
     max = Math.floor(max);
 

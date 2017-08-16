@@ -91,6 +91,13 @@ export class Snake extends BorderBox implements Entity {
   public grow(): void {
     let lastTailPos: Coordinates = this.tail[this.tail.length - 1].getPosition();
     this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, 0.8));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, 0.8));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, 0.8));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, 0.8));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, 0.8));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, 0.8));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, 0.8));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, 0.8));
   }
 
   private updatePosition(): void {
