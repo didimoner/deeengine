@@ -1,5 +1,5 @@
-import {GameScreen, Coordinates, Direction} from '../../../shared/interfaces';
-import {GAME_FIELD_WIDTH, GAME_FIELD_HEIGHT} from '../../../shared/constants';
+import {GameScreen, Coordinates, Direction, HitBox} from '../../../shared/interfaces';
+import {GAME_FIELD_WIDTH, GAME_FIELD_HEIGHT, TILE_SIZE} from '../../../shared/constants';
 import {Tile} from '../../../engine/primitives/tile';
 import {Snake} from './snake';
 import {Food} from './food';
@@ -21,6 +21,7 @@ export class SnakeGame implements GameScreen {
   private food: Food;
 
   private lastKeyCode: number;
+  private screenHitBox: HitBox[];
 
   constructor() {
     this.hud = new HUD();
@@ -30,13 +31,20 @@ export class SnakeGame implements GameScreen {
     this.speed = 10;
     this.score = 0;
 
-    this.snake = new Snake();
+    this.screenHitBox = [
+      {pos: {x: -2, y: -2}, size: {w: GAME_FIELD_WIDTH * TILE_SIZE, h: 1}},
+      {pos: {x: -2, y: -2}, size: {w: 1, h: GAME_FIELD_HEIGHT * TILE_SIZE}},
+      {pos: {x: GAME_FIELD_WIDTH * TILE_SIZE + 2, y: - 2}, size: {w: 1, h: GAME_FIELD_HEIGHT * TILE_SIZE}},
+      {pos: {x: -2, y: GAME_FIELD_HEIGHT * TILE_SIZE + 2}, size: {w: GAME_FIELD_WIDTH * TILE_SIZE, h: 1}},
+    ];
+
+    this.snake = new Snake(GAME_FIELD_WIDTH / 2, GAME_FIELD_HEIGHT / 2);
     this.food = new Food();
 
     this.hud.setSpeed(this.speed);
     this.hud.setScore(this.score);
 
-    this.food.setPosition(0, 5);
+    this.replaceFood();
   }
 
   public handleKeyboardInput(event: KeyboardEvent): void {
@@ -92,15 +100,25 @@ export class SnakeGame implements GameScreen {
       this.snake.update(timeDelta);
       this.snake.move();
 
+      // intersections
+
+      if (this.snake.intersects(this.food.getHitBox())) {
+        this.score += 5;
+        this.hud.setScore(this.score);
+
+        this.replaceFood();
+        this.snake.grow();
+      }
+
+      for (let hitBox of this.screenHitBox) {
+        if (this.snake.intersects(hitBox)) {
+          this.endGame();
+        }
+      }
+
+      // --------------------
+
       this.clock = 0;
-    }
-
-    if (this.snake.intersects(this.food.getHitBox())) {
-      this.score += 5;
-      this.hud.setScore(this.score);
-
-      this.replaceFood();
-      this.snake.grow();
     }
   }
   
@@ -123,7 +141,6 @@ export class SnakeGame implements GameScreen {
       y = this.getRandomNumber(0, GAME_FIELD_HEIGHT);
 
       if (exclude.filter(pos => pos.x === x && pos.y === y).length <= 0) {
-        console.log('OK!', i);
         break;
       } 
     }
@@ -136,5 +153,9 @@ export class SnakeGame implements GameScreen {
     max = Math.floor(max);
 
     return Math.floor(Math.random() * (max - min)) + min;
+  }
+
+  private endGame(): void {
+    this.snake.setDirection(0, 0);
   }
 }

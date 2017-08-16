@@ -4,6 +4,7 @@ import {BorderBox} from '../../../engine/primitives/border-box';
 import {TILE_SIZE} from '../../../shared/constants';
 
 const QUEUE_LENGTH = 2;
+const TAIL_OPACITY = 0.9;
 
 export class Snake extends BorderBox implements Entity {
 
@@ -14,20 +15,20 @@ export class Snake extends BorderBox implements Entity {
   private direction: Direction;
   private directionQueue: Direction[] = [];
  
-  constructor() {
+  constructor(x: number = 0, y: number = 0) {
     super();
 
-    this.head = new Tile(0, 0);
+    this.head = new Tile(x, y);
     this.hitBox.size = this.head.getSize();
 
-    this.tail.push(
-      new Tile(0, 0, 0.8),
-      new Tile(0, 0, 0.8)
-    );
-
-    this.position = <Coordinates>{x: 0, y: 0};
+    this.position = <Coordinates>{x, y};
     this.hitBox.pos = this.position;
     this.direction = <Direction>{x: 0, y: 0};
+
+    this.tail.push(
+      new Tile(this.head.getPosition().x, this.head.getPosition().y, TAIL_OPACITY),
+      new Tile(this.head.getPosition().x, this.head.getPosition().y, TAIL_OPACITY)
+    );
   }
 
   public update(timeDelta: number): void {
@@ -90,14 +91,24 @@ export class Snake extends BorderBox implements Entity {
 
   public grow(): void {
     let lastTailPos: Coordinates = this.tail[this.tail.length - 1].getPosition();
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, 0.8));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, 0.8));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, 0.8));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, 0.8));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, 0.8));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, 0.8));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, 0.8));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, 0.8));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
+    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
   }
 
   private updatePosition(): void {
