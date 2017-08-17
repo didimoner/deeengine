@@ -49,6 +49,13 @@ export class Tile {
     };
   }
 
+  public getRealPosition(): Coordinates {
+    return <Coordinates> {
+      x: this.position.x,
+      y: this.position.y
+    };
+  }
+
   public getSize(): Size {
     return <Size>{w: this.width, h: this.height};
   }

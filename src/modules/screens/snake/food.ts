@@ -11,7 +11,7 @@ export class Food extends BorderBox implements Entity {
     super();
 
     this.tile = new Tile(0, 0, 0.6);
-    this.hitBox = <HitBox>{pos: this.tile.getPosition(), size: this.tile.getSize()};
+    this.hitBox = <HitBox>{pos: this.tile.getRealPosition(), size: this.tile.getSize()};
   }
 
   public update(timeDelta: number): void {
@@ -24,10 +24,7 @@ export class Food extends BorderBox implements Entity {
 
   public setPosition(x: number, y: number): void {
     this.tile.setPosition(x, y);
-    this.hitBox.pos = <Coordinates>{
-      x: this.tile.getPosition().x * TILE_SIZE,
-      y: this.tile.getPosition().y * TILE_SIZE 
-    };
+    this.hitBox.pos = this.tile.getRealPosition();
   }
 
   public getPosition(): Coordinates {

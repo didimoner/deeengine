@@ -116,6 +116,12 @@ export class SnakeGame implements GameScreen {
         }
       }
 
+      for (let hitBox of this.snake.getTailHitBoxes()) {
+        if (this.snake.intersects(hitBox)) {
+          this.endGame();
+        }
+      }
+
       // --------------------
 
       this.clock = 0;
@@ -157,5 +163,7 @@ export class SnakeGame implements GameScreen {
 
   private endGame(): void {
     this.snake.setDirection(0, 0);
+
+    console.log('the end');
   }
 }

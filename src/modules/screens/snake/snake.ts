@@ -24,11 +24,6 @@ export class Snake extends BorderBox implements Entity {
     this.position = <Coordinates>{x, y};
     this.hitBox.pos = this.position;
     this.direction = <Direction>{x: 0, y: 0};
-
-    this.tail.push(
-      new Tile(this.head.getPosition().x, this.head.getPosition().y, TAIL_OPACITY),
-      new Tile(this.head.getPosition().x, this.head.getPosition().y, TAIL_OPACITY)
-    );
   }
 
   public update(timeDelta: number): void {
@@ -82,6 +77,13 @@ export class Snake extends BorderBox implements Entity {
     return <HitBox>{pos: this.position, size: this.head.getSize()};
   }
 
+  public getTailHitBoxes(): HitBox[] {
+    return this.tail.map(e => <HitBox>{
+        pos: e.getRealPosition(),
+        size: e.getSize()
+      });
+  }
+
   public getSnakeTilePositions(): Coordinates[] {
     let result: Coordinates[] = this.tail.map(e => e.getPosition());
     result.unshift(this.head.getPosition());
@@ -90,7 +92,9 @@ export class Snake extends BorderBox implements Entity {
   }
 
   public grow(): void {
-    let lastTailPos: Coordinates = this.tail[this.tail.length - 1].getPosition();
+    const lastTile: Tile = this.tail.length ? this.tail[this.tail.length - 1] : this.head;
+    const lastTailPos: Coordinates = lastTile.getPosition();
+
     this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
     this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
     this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
@@ -114,11 +118,14 @@ export class Snake extends BorderBox implements Entity {
   private updatePosition(): void {
     let headLastPos: Coordinates = this.head.getPosition();
 
-    for (let i = this.tail.length - 1; i > 0; i--) {
-      let nextPos: Coordinates = this.tail[i-1].getPosition();
-      this.tail[i].setPosition(nextPos.x, nextPos.y);
+    if (this.tail.length > 0) {
+      for (let i = this.tail.length - 1; i > 0; i--) {
+        let nextPos: Coordinates = this.tail[i-1].getPosition();
+        this.tail[i].setPosition(nextPos.x, nextPos.y);
+      }
+      this.tail[0].setPosition(headLastPos.x, headLastPos.y);
     }
-    this.tail[0].setPosition(headLastPos.x, headLastPos.y);
+
     this.head.setPosition(this.position.x, this.position.y);
   }
 }
