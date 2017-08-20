@@ -1,5 +1,5 @@
 import {ScreenManager} from "./screen-manager";
-import {CANVAS_WIDTH, CANVAS_HEIGHT} from "../shared/constants";
+import {CANVAS_WIDTH, CANVAS_HEIGHT, MAIN_COLOR} from "../shared/constants";
 
 export class Game {
 
@@ -33,7 +33,7 @@ export class Game {
   private draw(): void {
     // clearing the screen
     this.ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    this.ctx.fillStyle = "#9EAD86";
+    this.ctx.fillStyle = MAIN_COLOR;
     this.ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     
     this.screenManager.draw(this.ctx);

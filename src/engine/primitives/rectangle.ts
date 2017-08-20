@@ -32,41 +32,19 @@ export class Rectangle {
   }
 
   public update(): void {
-    if (this.position.x + this.size.w/2 >= CANVAS_WIDTH) {
-      this.xDirection = -1;
-    } else if (this.position.x + this.size.w/2 <= 0) {
-      this.xDirection = 1;
-    }
 
-    if (this.position.y + this.size.h/2 >= CANVAS_HEIGHT) {
-      this.yDirection = -1;
-    } else if (this.position.y + this.size.h/2 <= 0) {
-      this.yDirection = 1;
-    }
   }
 
   public draw(ctx: CanvasRenderingContext2D): void {
     ctx.save();
-
     ctx.lineWidth = this.lineWidth;
-    ctx.strokeStyle = this.strokeStyle;
     ctx.fillStyle = this.fillStyle;
-    
-    ctx.translate(this.size.w/2 + this.position.x, this.size.h/2 + this.position.y);
-    ctx.rotate(this.rotation * Math.PI/180);
-    ctx.translate(-this.size.w/2 - this.position.x, -this.size.h/2 - this.position.y);
-
     ctx.fillRect(this.position.x, this.position.y, this.size.w, this.size.h);
-
     ctx.restore();
-  }
 
-  public move(x: number, y: number): void { 
-    this.position.x += x * this.xDirection;
-    this.position.y += y * this.yDirection;
-  }
-
-  public rotate(rotation: number): void {
-    this.rotation += rotation;
+    ctx.save();
+    ctx.strokeStyle = this.strokeStyle;
+    ctx.strokeRect(this.position.x, this.position.y, this.size.w, this.size.h);
+    ctx.restore();
   }
 }

@@ -30,8 +30,10 @@ export class Snake extends BorderBox implements Entity {
     if (this.directionQueue.length) {
       this.direction = this.directionQueue.pop();
     }
-    
-    this.updatePosition();
+
+    if (this.direction.x || this.direction.y) {
+      this.updatePosition();
+    }
   }
 
   public draw(ctx: CanvasRenderingContext2D): void {
@@ -95,23 +97,6 @@ export class Snake extends BorderBox implements Entity {
     const lastTile: Tile = this.tail.length ? this.tail[this.tail.length - 1] : this.head;
     const lastTailPos: Coordinates = lastTile.getPosition();
 
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
     this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
   }
 
