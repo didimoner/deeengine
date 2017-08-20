@@ -61,5 +61,5 @@ typings/
 package-lock.json
 *.db
 
-dist/
 .idea/
+.DS_STORE
