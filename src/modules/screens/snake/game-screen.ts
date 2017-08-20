@@ -8,6 +8,8 @@ import {TileBackground} from '../../tile-background';
 import {HUD} from '../../hud';
 
 const CLOCK_RESET_TIME = 1;
+const SPEED_UP_SCORE = 25;
+
 enum GameState {
   ACTIVE = <any>'ACTIVE',
   PAUSED = <any>'PAUSED'
@@ -22,6 +24,7 @@ export class SnakeGame implements GameScreen {
   private clock: number;
   private speed: number;
   private score: number;
+  private lastScore: number;
 
   private snake: Snake;
   private food: Food;
@@ -105,6 +108,12 @@ export class SnakeGame implements GameScreen {
       if (this.gameState === GameState.ACTIVE) {
         this.snake.update(timeDelta);
         this.snake.move();
+
+        if (this.score - this.lastScore >= SPEED_UP_SCORE) {
+          this.speed += 1;
+          this.hud.setSpeed(this.speed);
+          this.lastScore = this.score;
+        }
   
         // intersections
         if (this.snake.intersects(this.food.getHitBox())) {
@@ -148,6 +157,7 @@ export class SnakeGame implements GameScreen {
     this.clock = 0;
     this.speed = 5;
     this.score = 0;
+    this.lastScore = this.score;
 
     this.snake = new Snake(GAME_FIELD_WIDTH / 2, GAME_FIELD_HEIGHT / 2);
     this.food = new Food();
