@@ -1,10 +1,10 @@
 import {Entity, Coordinates, Direction, HitBox} from '../../../shared/interfaces';
-import {Tile} from '../../../engine/primitives/tile';
-import {BorderBox} from '../../../engine/primitives/border-box';
+import {Tile} from '../../../engine/components/tile';
+import {BorderBox} from '../../../engine/components/border-box';
 import {TILE_SIZE} from '../../../shared/constants';
 
 const QUEUE_LENGTH = 2;
-const TAIL_OPACITY = 0.9;
+const TAIL_OPACITY = 0.8;
 
 export class Snake extends BorderBox implements Entity {
 

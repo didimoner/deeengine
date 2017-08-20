@@ -1,6 +1,6 @@
 import {Entity} from '../shared/interfaces';
 import {GAME_FIELD_WIDTH, GAME_FIELD_HEIGHT} from '../shared/constants';
-import {Tile} from '../engine/primitives/tile';
+import {Tile} from '../engine/components/tile';
 
 export class TileBackground implements Entity {
   

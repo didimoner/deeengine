@@ -1,7 +1,9 @@
 import {Entity, Coordinates, Direction, HitBox} from '../../../shared/interfaces';
-import {Tile} from '../../../engine/primitives/tile';
-import {BorderBox} from '../../../engine/primitives/border-box';
+import {Tile} from '../../../engine/components/tile';
+import {BorderBox} from '../../../engine/components/border-box';
 import {TILE_SIZE} from '../../../shared/constants';
+
+const FOOD_OPACITY = 0.5;
 
 export class Food extends BorderBox implements Entity {
 
@@ -10,7 +12,7 @@ export class Food extends BorderBox implements Entity {
   constructor() {
     super();
 
-    this.tile = new Tile(0, 0, 0.6);
+    this.tile = new Tile(0, 0, FOOD_OPACITY);
     this.hitBox = <HitBox>{pos: this.tile.getRealPosition(), size: this.tile.getSize()};
   }
 

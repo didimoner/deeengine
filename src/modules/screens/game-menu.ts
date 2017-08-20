@@ -1,8 +1,8 @@
 import {GameScreen, GameListElement} from '../../shared/interfaces';
 import {CANVAS_HEIGHT, TILE_SIZE} from '../../shared/constants';
 import {GAME_LIST} from '../game-list';
-import {Text} from '../../engine/primitives/text';
-import {Tile} from '../../engine/primitives/tile';
+import {Text} from '../../engine/components/text';
+import {Tile} from '../../engine/components/tile';
 
 export class GameMenu implements GameScreen {
 
@@ -35,20 +35,20 @@ export class GameMenu implements GameScreen {
 
   public handleKeyboardInput(event: KeyboardEvent): void {
     switch (event.keyCode) {
-      case 38:
+      case 38: // up
         if (this.activeItem !== 0) {
           this.activeItem--;
         }
         break;
 
-      case 40:
+      case 40: // down
         if (this.activeItem < this.menuItems.length - 1) {
           this.activeItem++;
         }
         break;
 
-      case 32:
-      case 13:
+      case 32: // space
+      case 13: // enter
         this.dispatchScreen();
         break;
     }

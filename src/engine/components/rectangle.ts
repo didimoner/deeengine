@@ -9,11 +9,6 @@ export class Rectangle {
   private lineWidth: number;
   private strokeStyle: string;
   private fillStyle: string;
-
-  private xDirection: number = 1;
-  private yDirection: number = 1;
-
-  private rotation: number = 0;
   
   constructor(
     x: number, 

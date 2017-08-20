@@ -1,5 +1,5 @@
-import {Text} from '../engine/primitives/text';
-import {Line} from '../engine/primitives/line';
+import {Text} from '../engine/components/text';
+import {Line} from '../engine/components/line';
 import {GAME_FIELD_WIDTH, GAME_FIELD_HEIGHT, TILE_SIZE} from '../shared/constants';
 
 export class HUD {

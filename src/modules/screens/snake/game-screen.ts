@@ -1,7 +1,7 @@
 import {GameScreen, Coordinates, Direction, HitBox, Size} from '../../../shared/interfaces';
 import {GAME_FIELD_WIDTH, GAME_FIELD_HEIGHT, TILE_SIZE, CANVAS_HEIGHT, CANVAS_WIDTH} from '../../../shared/constants';
-import {Tile} from '../../../engine/primitives/tile';
-import {Popup} from '../../../engine/primitives/pop-up';
+import {Tile} from '../../../engine/components/tile';
+import {Popup} from '../../../engine/components/pop-up';
 import {Snake} from './snake';
 import {Food} from './food';
 import {TileBackground} from '../../tile-background';
@@ -202,7 +202,11 @@ export class SnakeGame implements GameScreen {
       CANVAS_WIDTH / 2,
       CANVAS_HEIGHT /2,
       'Game Over',
-      ['Your result: ' + this.score.toString(), 'Press Enter', 'to continue...']
+      [
+        'Your result: ' + this.score.toString(), 
+        'Press Enter', 
+        'to continue...'
+      ]
     );
     this.popup.setState(true);
   }

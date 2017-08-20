@@ -1,6 +1,6 @@
 import {GameScreen} from '../../shared/interfaces';
-import {Tile} from '../../engine/primitives/tile';
-import {TileFigure} from '../../engine/primitives/figure';
+import {Tile} from '../../engine/components/tile';
+import {TileFigure} from '../../engine/components/figure';
 import {HUD} from '../hud';
 
 export class TilesDemo implements GameScreen {
