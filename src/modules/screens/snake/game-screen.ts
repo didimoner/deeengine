@@ -85,8 +85,11 @@ export class SnakeGame implements GameScreen {
         break;
 
       case 13: // enter
-        this.popup = null;
-        this.init();
+        if (this.gameState === GameState.PAUSED) {
+          this.popup = null;
+          this.init();
+        }
+
         break;
     }
 
@@ -189,7 +192,7 @@ export class SnakeGame implements GameScreen {
       CANVAS_WIDTH / 2,
       CANVAS_HEIGHT /2,
       'Game Over',
-      'Your result: ' + this.score.toString()
+      ['Your result: ' + this.score.toString(), 'Press Enter', 'to continue...']
     );
     this.popup.setState(true);
   }
