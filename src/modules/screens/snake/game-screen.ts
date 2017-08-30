@@ -42,7 +42,7 @@ export class SnakeGame implements GameScreen {
       {pos: {x: -2, y: GAME_FIELD_HEIGHT * TILE_SIZE + 2}, size: {w: GAME_FIELD_WIDTH * TILE_SIZE, h: 1}},
     ];
 
-    this.init();
+    this.initGame();
   }
 
   public handleKeyboardInput(event: KeyboardEvent): void {
@@ -79,7 +79,7 @@ export class SnakeGame implements GameScreen {
     } else if (keyCode === 13) {
       if (this.gameState === GameState.PAUSED) { // enter
         this.popup = null;
-        this.init();
+        this.initGame();
       }
     }
 
@@ -90,6 +90,8 @@ export class SnakeGame implements GameScreen {
 
   public update(timeDelta: number): void {
     if (this.gameState !== GameState.ACTIVE) return;
+
+    this.snake.update(timeDelta);
 
     // intersections
     if (this.snake.intersects(this.food.getHitBox())) {
@@ -110,9 +112,7 @@ export class SnakeGame implements GameScreen {
       if (this.snake.intersects(hitBox)) {
         this.endGame();
       }
-    }
-
-    this.snake.update(timeDelta);      
+    }      
     
     if (this.score - this.lastScore >= SPEED_UP_SCORE) {
       const snakeSpeed: number = this.snake.getSpeed();
@@ -133,21 +133,6 @@ export class SnakeGame implements GameScreen {
     if (this.popup) {
       this.popup.draw(ctx);
     }
-  }
-
-  private init(): void {
-    this.score = 0;
-    this.lastScore = this.score;
-    this.lastKeyCode = 0;
-
-    this.snake = new Snake(GAME_FIELD_WIDTH / 2, GAME_FIELD_HEIGHT / 2);
-    this.food = new Food();
-
-    this.hud.setSpeed(this.snake.getSpeed());
-    this.hud.setScore(this.score);
-
-    this.replaceFood();
-    this.gameState = GameState.ACTIVE;    
   }
 
   private replaceFood(): void {
@@ -173,6 +158,21 @@ export class SnakeGame implements GameScreen {
     max = Math.floor(max);
 
     return Math.floor(Math.random() * (max - min)) + min;
+  }
+
+  private initGame(): void {
+    this.score = 0;
+    this.lastScore = this.score;
+    this.lastKeyCode = 0;
+
+    this.snake = new Snake(Math.floor(GAME_FIELD_WIDTH / 2), Math.floor(GAME_FIELD_HEIGHT / 2));
+    this.food = new Food();
+
+    this.hud.setSpeed(this.snake.getSpeed());
+    this.hud.setScore(this.score);
+
+    this.replaceFood();
+    this.gameState = GameState.ACTIVE;    
   }
 
   private endGame(): void {
