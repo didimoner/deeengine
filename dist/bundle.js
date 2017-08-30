@@ -337,6 +337,7 @@ var screen_manager_1 = __webpack_require__(9);
 var constants_1 = __webpack_require__(0);
 var Game = (function () {
     function Game(canvas) {
+        var _this = this;
         this.currTime = 0;
         this.lastTime = 0;
         canvas.width = constants_1.CANVAS_WIDTH;
@@ -345,7 +346,7 @@ var Game = (function () {
         this.screenManager = new screen_manager_1.ScreenManager();
         this.currTime = Date.now();
         this.lastTime = this.currTime;
-        document.addEventListener('keydown', this.screenManager.handleKeyboardInput.bind(this.screenManager));
+        document.addEventListener('keydown', function (event) { return _this.screenManager.handleKeyboardInput(event); });
     }
     Game.prototype.update = function () {
         this.currTime = Date.now();
@@ -641,7 +642,6 @@ var snake_1 = __webpack_require__(18);
 var food_1 = __webpack_require__(19);
 var tile_background_1 = __webpack_require__(20);
 var hud_1 = __webpack_require__(4);
-var CLOCK_RESET_TIME = 1;
 var SPEED_UP_SCORE = 25;
 var GameState;
 (function (GameState) {
@@ -665,25 +665,25 @@ var SnakeGame = (function () {
         switch (event.keyCode) {
             case 37:// left
                 if (this.lastKeyCode != 39) {
-                    this.snake.setDirection(-1, 0);
+                    this.snake.turn(-1, 0);
                     isValidInput = true;
                 }
                 break;
             case 38:// up
                 if (this.lastKeyCode != 40) {
-                    this.snake.setDirection(0, -1);
+                    this.snake.turn(0, -1);
                     isValidInput = true;
                 }
                 break;
             case 39:// right
                 if (this.lastKeyCode != 37) {
-                    this.snake.setDirection(1, 0);
+                    this.snake.turn(1, 0);
                     isValidInput = true;
                 }
                 break;
             case 40:// down
                 if (this.lastKeyCode != 38) {
-                    this.snake.setDirection(0, 1);
+                    this.snake.turn(0, 1);
                     isValidInput = true;
                 }
                 break;
@@ -702,37 +702,33 @@ var SnakeGame = (function () {
         }
     };
     SnakeGame.prototype.update = function (timeDelta) {
-        this.clock += timeDelta * this.speed;
-        if (this.clock > CLOCK_RESET_TIME) {
-            if (this.gameState === GameState.ACTIVE) {
-                this.snake.update(timeDelta);
-                this.snake.move();
-                if (this.score - this.lastScore >= SPEED_UP_SCORE) {
-                    this.speed += 1;
-                    this.hud.setSpeed(this.speed);
-                    this.lastScore = this.score;
-                }
-                // intersections
-                if (this.snake.intersects(this.food.getHitBox())) {
-                    this.score += 5;
-                    this.hud.setScore(this.score);
-                    this.replaceFood();
-                    this.snake.grow();
-                }
-                for (var _i = 0, _a = this.screenHitBox; _i < _a.length; _i++) {
-                    var hitBox = _a[_i];
-                    if (this.snake.intersects(hitBox)) {
-                        this.endGame();
-                    }
-                }
-                for (var _b = 0, _c = this.snake.getTailHitBoxes(); _b < _c.length; _b++) {
-                    var hitBox = _c[_b];
-                    if (this.snake.intersects(hitBox)) {
-                        this.endGame();
-                    }
+        if (this.gameState === GameState.ACTIVE) {
+            // intersections
+            if (this.snake.intersects(this.food.getHitBox())) {
+                this.score += 5;
+                this.hud.setScore(this.score);
+                this.replaceFood();
+                this.snake.grow();
+            }
+            for (var _i = 0, _a = this.screenHitBox; _i < _a.length; _i++) {
+                var hitBox = _a[_i];
+                if (this.snake.intersects(hitBox)) {
+                    this.endGame();
                 }
             }
-            this.clock = 0;
+            for (var _b = 0, _c = this.snake.getTailHitBoxes(); _b < _c.length; _b++) {
+                var hitBox = _c[_b];
+                if (this.snake.intersects(hitBox)) {
+                    this.endGame();
+                }
+            }
+            this.snake.update(timeDelta);
+            if (this.score - this.lastScore >= SPEED_UP_SCORE) {
+                var snakeSpeed = this.snake.getSpeed();
+                this.snake.setSpeed(snakeSpeed + 1);
+                this.hud.setSpeed(snakeSpeed);
+                this.lastScore = this.score;
+            }
         }
     };
     SnakeGame.prototype.draw = function (ctx) {
@@ -745,13 +741,11 @@ var SnakeGame = (function () {
         }
     };
     SnakeGame.prototype.init = function () {
-        this.clock = 0;
-        this.speed = 5;
         this.score = 0;
         this.lastScore = this.score;
         this.snake = new snake_1.Snake(constants_1.GAME_FIELD_WIDTH / 2, constants_1.GAME_FIELD_HEIGHT / 2);
         this.food = new food_1.Food();
-        this.hud.setSpeed(this.speed);
+        this.hud.setSpeed(this.snake.getSpeed());
         this.hud.setScore(this.score);
         this.replaceFood();
         this.gameState = GameState.ACTIVE;
@@ -892,6 +886,7 @@ var border_box_1 = __webpack_require__(5);
 var constants_1 = __webpack_require__(0);
 var QUEUE_LENGTH = 2;
 var TAIL_OPACITY = 0.8;
+var CLOCK_RESET_TIME = 1;
 var Snake = (function (_super) {
     __extends(Snake, _super);
     function Snake(x, y) {
@@ -899,7 +894,8 @@ var Snake = (function (_super) {
         if (y === void 0) { y = 0; }
         var _this = _super.call(this) || this;
         _this.tail = [];
-        _this.directionQueue = [];
+        _this.clock = 0;
+        _this.speed = 1;
         _this.head = new tile_1.Tile(x, y);
         _this.hitBox.size = _this.head.getSize();
         _this.position = { x: x, y: y };
@@ -908,11 +904,10 @@ var Snake = (function (_super) {
         return _this;
     }
     Snake.prototype.update = function (timeDelta) {
-        if (this.directionQueue.length) {
-            this.direction = this.directionQueue.pop();
-        }
-        if (this.direction.x || this.direction.y) {
-            this.updatePosition();
+        this.clock += timeDelta * this.speed;
+        if (this.clock > CLOCK_RESET_TIME) {
+            this.move();
+            this.clock = 0;
         }
     };
     Snake.prototype.draw = function (ctx) {
@@ -921,6 +916,18 @@ var Snake = (function (_super) {
             part.draw(ctx);
         }
         this.head.draw(ctx);
+    };
+    Snake.prototype.turn = function (x, y) {
+        this.setDirection(x, y);
+        this.move();
+        this.clock = 0;
+    };
+    Snake.prototype.move = function () {
+        this.setPosition(this.position.x + 1 * this.direction.x, this.position.y + 1 * this.direction.y);
+        this.updatePosition();
+    };
+    Snake.prototype.grow = function () {
+        this.tail.push(new tile_1.Tile(-1 * constants_1.TILE_SIZE, -1 * constants_1.TILE_SIZE, TAIL_OPACITY));
     };
     Snake.prototype.setPosition = function (x, y) {
         this.position = { x: x, y: y };
@@ -933,16 +940,16 @@ var Snake = (function (_super) {
         return this.position;
     };
     Snake.prototype.setDirection = function (x, y) {
-        if (this.directionQueue.length > QUEUE_LENGTH) {
-            this.directionQueue.pop();
-        }
-        this.directionQueue.unshift({ x: x, y: y });
+        this.direction = { x: x, y: y };
     };
     Snake.prototype.getDirection = function () {
         return this.direction;
     };
-    Snake.prototype.move = function () {
-        this.setPosition(this.position.x + 1 * this.direction.x, this.position.y + 1 * this.direction.y);
+    Snake.prototype.getSpeed = function () {
+        return this.speed;
+    };
+    Snake.prototype.setSpeed = function (value) {
+        this.speed = value;
     };
     Snake.prototype.getHitBox = function () {
         return { pos: this.position, size: this.head.getSize() };
@@ -958,12 +965,9 @@ var Snake = (function (_super) {
         result.unshift(this.head.getPosition());
         return result;
     };
-    Snake.prototype.grow = function () {
-        var lastTile = this.tail.length ? this.tail[this.tail.length - 1] : this.head;
-        var lastTailPos = lastTile.getPosition();
-        this.tail.push(new tile_1.Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
-    };
     Snake.prototype.updatePosition = function () {
+        if (!this.direction.x && !this.direction.y)
+            return;
         var headLastPos = this.head.getPosition();
         if (this.tail.length > 0) {
             for (var i = this.tail.length - 1; i > 0; i--) {
