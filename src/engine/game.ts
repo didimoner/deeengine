@@ -19,7 +19,7 @@ export class Game {
     this.currTime = Date.now();
     this.lastTime = this.currTime;
 
-    document.addEventListener('keydown', this.screenManager.handleKeyboardInput.bind(this.screenManager));
+    document.addEventListener('keydown', event => this.screenManager.handleKeyboardInput(event));
   }
 
   private update(): void {

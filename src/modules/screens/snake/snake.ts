@@ -5,6 +5,7 @@ import {TILE_SIZE} from '../../../shared/constants';
 
 const QUEUE_LENGTH = 2;
 const TAIL_OPACITY = 0.8;
+const CLOCK_RESET_TIME = 1;
 
 export class Snake extends BorderBox implements Entity {
 
@@ -13,10 +14,15 @@ export class Snake extends BorderBox implements Entity {
 
   private position: Coordinates;
   private direction: Direction;
-  private directionQueue: Direction[] = [];
- 
+
+  private clock: number;
+  private speed: number;
+  
   constructor(x: number = 0, y: number = 0) {
     super();
+
+    this.clock = 0;
+    this.speed = 1;
 
     this.head = new Tile(x, y);
     this.hitBox.size = this.head.getSize();
@@ -27,12 +33,11 @@ export class Snake extends BorderBox implements Entity {
   }
 
   public update(timeDelta: number): void {
-    if (this.directionQueue.length) {
-      this.direction = this.directionQueue.pop();
-    }
-
-    if (this.direction.x || this.direction.y) {
-      this.updatePosition();
+    this.clock += timeDelta * this.speed;
+    
+    if (this.clock > CLOCK_RESET_TIME) {
+      this.move();
+      this.clock = 0;
     }
   }
 
@@ -42,6 +47,26 @@ export class Snake extends BorderBox implements Entity {
     }
 
     this.head.draw(ctx);
+  }
+
+  public turn(x: number, y: number): void {
+    this.setDirection(x, y);
+
+    this.move();
+    this.clock = 0;
+  } 
+  
+  private move(): void {
+    this.setPosition(
+      this.position.x + 1 * this.direction.x, 
+      this.position.y + 1 * this.direction.y
+    );
+
+    this.updatePosition();    
+  }
+
+  public grow(): void {
+    this.tail.push(new Tile(-1 * TILE_SIZE, -1 * TILE_SIZE, TAIL_OPACITY));
   }
 
   public setPosition(x: number, y: number): void {
@@ -57,22 +82,19 @@ export class Snake extends BorderBox implements Entity {
   }
 
   public setDirection(x: number, y: number): void {
-    if (this.directionQueue.length > QUEUE_LENGTH) {
-      this.directionQueue.pop();
-    }
-
-    this.directionQueue.unshift(<Direction>{x, y});
+    this.direction = <Direction>{x, y};
   } 
-  
+
   public getDirection(): Direction {
     return this.direction;
   }
 
-  public move(): void {
-    this.setPosition(
-      this.position.x + 1 * this.direction.x, 
-      this.position.y + 1 * this.direction.y
-    );
+  public getSpeed(): number {
+    return this.speed;
+  }
+
+  public setSpeed(value: number) {
+    this.speed = value;
   }
 
   public getHitBox(): HitBox {
@@ -93,14 +115,9 @@ export class Snake extends BorderBox implements Entity {
     return result;
   }
 
-  public grow(): void {
-    const lastTile: Tile = this.tail.length ? this.tail[this.tail.length - 1] : this.head;
-    const lastTailPos: Coordinates = lastTile.getPosition();
-
-    this.tail.push(new Tile(lastTailPos.x, lastTailPos.y, TAIL_OPACITY));
-  }
-
   private updatePosition(): void {
+    if (!this.direction.x && !this.direction.y) return;
+
     let headLastPos: Coordinates = this.head.getPosition();
 
     if (this.tail.length > 0) {

@@ -7,7 +7,7 @@ import {Food} from './food';
 import {TileBackground} from '../../tile-background';
 import {HUD} from '../../hud';
 
-const CLOCK_RESET_TIME = 1;
+
 const SPEED_UP_SCORE = 25;
 
 enum GameState {
@@ -21,8 +21,6 @@ export class SnakeGame implements GameScreen {
   private background: TileBackground;
   private popup: Popup;
 
-  private clock: number;
-  private speed: number;
   private score: number;
   private lastScore: number;
 
@@ -53,7 +51,7 @@ export class SnakeGame implements GameScreen {
     switch (event.keyCode) {
       case 37: // left
         if (this.lastKeyCode != 39) {
-          this.snake.setDirection(-1, 0);
+          this.snake.turn(-1, 0);
           isValidInput = true;
         } 
 
@@ -61,7 +59,7 @@ export class SnakeGame implements GameScreen {
       
       case 38: // up
         if (this.lastKeyCode != 40) {
-          this.snake.setDirection(0, -1);
+          this.snake.turn(0, -1);
           isValidInput = true;
         }
 
@@ -69,7 +67,7 @@ export class SnakeGame implements GameScreen {
 
       case 39: // right
         if (this.lastKeyCode != 37) {
-          this.snake.setDirection(1, 0);
+          this.snake.turn(1, 0);
           isValidInput = true;
         }
 
@@ -77,7 +75,7 @@ export class SnakeGame implements GameScreen {
 
       case 40: // down
         if (this.lastKeyCode != 38) {
-          this.snake.setDirection(0, 1);
+          this.snake.turn(0, 1);
           isValidInput = true;
         }
 
@@ -102,42 +100,37 @@ export class SnakeGame implements GameScreen {
   }
 
   public update(timeDelta: number): void {
-    this.clock += timeDelta * this.speed;
+    if (this.gameState === GameState.ACTIVE) {
+      // intersections
+      if (this.snake.intersects(this.food.getHitBox())) {
+        this.score += 5;
+        this.hud.setScore(this.score);
 
-    if (this.clock > CLOCK_RESET_TIME) {
-      if (this.gameState === GameState.ACTIVE) {
-        this.snake.update(timeDelta);
-        this.snake.move();
+        this.replaceFood();
+        this.snake.grow();
+      }
 
-        if (this.score - this.lastScore >= SPEED_UP_SCORE) {
-          this.speed += 1;
-          this.hud.setSpeed(this.speed);
-          this.lastScore = this.score;
-        }
-  
-        // intersections
-        if (this.snake.intersects(this.food.getHitBox())) {
-          this.score += 5;
-          this.hud.setScore(this.score);
-  
-          this.replaceFood();
-          this.snake.grow();
-        }
-  
-        for (let hitBox of this.screenHitBox) {
-          if (this.snake.intersects(hitBox)) {
-            this.endGame();
-          }
-        }
-  
-        for (let hitBox of this.snake.getTailHitBoxes()) {
-          if (this.snake.intersects(hitBox)) {
-            this.endGame();
-          }
+      for (let hitBox of this.screenHitBox) {
+        if (this.snake.intersects(hitBox)) {
+          this.endGame();
         }
       }
 
-      this.clock = 0;
+      for (let hitBox of this.snake.getTailHitBoxes()) {
+        if (this.snake.intersects(hitBox)) {
+          this.endGame();
+        }
+      }
+
+      this.snake.update(timeDelta);      
+      
+      if (this.score - this.lastScore >= SPEED_UP_SCORE) {
+        const snakeSpeed: number = this.snake.getSpeed();
+
+        this.snake.setSpeed(snakeSpeed  + 1);
+        this.hud.setSpeed(snakeSpeed);
+        this.lastScore = this.score;
+      }
     }
   }
   
@@ -154,15 +147,13 @@ export class SnakeGame implements GameScreen {
   }
 
   private init(): void {
-    this.clock = 0;
-    this.speed = 5;
     this.score = 0;
     this.lastScore = this.score;
 
     this.snake = new Snake(GAME_FIELD_WIDTH / 2, GAME_FIELD_HEIGHT / 2);
     this.food = new Food();
 
-    this.hud.setSpeed(this.speed);
+    this.hud.setSpeed(this.snake.getSpeed());
     this.hud.setScore(this.score);
 
     this.replaceFood();
