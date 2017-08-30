@@ -658,77 +658,78 @@ var SnakeGame = (function () {
             { pos: { x: constants_1.GAME_FIELD_WIDTH * constants_1.TILE_SIZE + 2, y: -2 }, size: { w: 1, h: constants_1.GAME_FIELD_HEIGHT * constants_1.TILE_SIZE } },
             { pos: { x: -2, y: constants_1.GAME_FIELD_HEIGHT * constants_1.TILE_SIZE + 2 }, size: { w: constants_1.GAME_FIELD_WIDTH * constants_1.TILE_SIZE, h: 1 } },
         ];
-        this.init();
+        this.initGame();
     }
     SnakeGame.prototype.handleKeyboardInput = function (event) {
+        var keyCode = event.keyCode;
         var isValidInput = false;
-        switch (event.keyCode) {
-            case 37:// left
+        if (this.gameState === GameState.ACTIVE) {
+            if (keyCode === 37) {
                 if (this.lastKeyCode != 39) {
                     this.snake.turn(-1, 0);
                     isValidInput = true;
                 }
-                break;
-            case 38:// up
+            }
+            else if (keyCode === 38) {
                 if (this.lastKeyCode != 40) {
                     this.snake.turn(0, -1);
                     isValidInput = true;
                 }
-                break;
-            case 39:// right
+            }
+            else if (keyCode === 39) {
                 if (this.lastKeyCode != 37) {
                     this.snake.turn(1, 0);
                     isValidInput = true;
                 }
-                break;
-            case 40:// down
+            }
+            else if (keyCode === 40) {
                 if (this.lastKeyCode != 38) {
                     this.snake.turn(0, 1);
                     isValidInput = true;
                 }
-                break;
-            case 27:// esc
-                document.dispatchEvent(new CustomEvent('gameStateEvent', { detail: -1 }));
-                break;
-            case 13:// enter
-                if (this.gameState === GameState.PAUSED) {
-                    this.popup = null;
-                    this.init();
-                }
-                break;
+            }
+        }
+        if (keyCode === 27) {
+            document.dispatchEvent(new CustomEvent('gameStateEvent', { detail: -1 }));
+        }
+        else if (keyCode === 13) {
+            if (this.gameState === GameState.PAUSED) {
+                this.popup = null;
+                this.initGame();
+            }
         }
         if (isValidInput) {
             this.lastKeyCode = event.keyCode;
         }
     };
     SnakeGame.prototype.update = function (timeDelta) {
-        if (this.gameState === GameState.ACTIVE) {
-            // intersections
-            if (this.snake.intersects(this.food.getHitBox())) {
-                this.score += 5;
-                this.hud.setScore(this.score);
-                this.replaceFood();
-                this.snake.grow();
+        if (this.gameState !== GameState.ACTIVE)
+            return;
+        this.snake.update(timeDelta);
+        // intersections
+        if (this.snake.intersects(this.food.getHitBox())) {
+            this.score += 5;
+            this.hud.setScore(this.score);
+            this.replaceFood();
+            this.snake.grow();
+        }
+        for (var _i = 0, _a = this.screenHitBox; _i < _a.length; _i++) {
+            var hitBox = _a[_i];
+            if (this.snake.intersects(hitBox)) {
+                this.endGame();
             }
-            for (var _i = 0, _a = this.screenHitBox; _i < _a.length; _i++) {
-                var hitBox = _a[_i];
-                if (this.snake.intersects(hitBox)) {
-                    this.endGame();
-                }
+        }
+        for (var _b = 0, _c = this.snake.getTailHitBoxes(); _b < _c.length; _b++) {
+            var hitBox = _c[_b];
+            if (this.snake.intersects(hitBox)) {
+                this.endGame();
             }
-            for (var _b = 0, _c = this.snake.getTailHitBoxes(); _b < _c.length; _b++) {
-                var hitBox = _c[_b];
-                if (this.snake.intersects(hitBox)) {
-                    this.endGame();
-                }
-            }
-            this.snake.update(timeDelta);
-            if (this.score - this.lastScore >= SPEED_UP_SCORE) {
-                var snakeSpeed = this.snake.getSpeed();
-                this.snake.setSpeed(snakeSpeed + 1);
-                this.hud.setSpeed(snakeSpeed);
-                this.lastScore = this.score;
-            }
+        }
+        if (this.score - this.lastScore >= SPEED_UP_SCORE) {
+            var snakeSpeed = this.snake.getSpeed();
+            this.snake.setSpeed(snakeSpeed + 1);
+            this.hud.setSpeed(snakeSpeed);
+            this.lastScore = this.score;
         }
     };
     SnakeGame.prototype.draw = function (ctx) {
@@ -739,16 +740,6 @@ var SnakeGame = (function () {
         if (this.popup) {
             this.popup.draw(ctx);
         }
-    };
-    SnakeGame.prototype.init = function () {
-        this.score = 0;
-        this.lastScore = this.score;
-        this.snake = new snake_1.Snake(constants_1.GAME_FIELD_WIDTH / 2, constants_1.GAME_FIELD_HEIGHT / 2);
-        this.food = new food_1.Food();
-        this.hud.setSpeed(this.snake.getSpeed());
-        this.hud.setScore(this.score);
-        this.replaceFood();
-        this.gameState = GameState.ACTIVE;
     };
     SnakeGame.prototype.replaceFood = function () {
         var exclude = [this.snake.getPosition()].concat(this.snake.getSnakeTilePositions());
@@ -767,6 +758,17 @@ var SnakeGame = (function () {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min)) + min;
+    };
+    SnakeGame.prototype.initGame = function () {
+        this.score = 0;
+        this.lastScore = this.score;
+        this.lastKeyCode = 0;
+        this.snake = new snake_1.Snake(Math.floor(constants_1.GAME_FIELD_WIDTH / 2), Math.floor(constants_1.GAME_FIELD_HEIGHT / 2));
+        this.food = new food_1.Food();
+        this.hud.setSpeed(this.snake.getSpeed());
+        this.hud.setScore(this.score);
+        this.replaceFood();
+        this.gameState = GameState.ACTIVE;
     };
     SnakeGame.prototype.endGame = function () {
         this.gameState = GameState.PAUSED;
