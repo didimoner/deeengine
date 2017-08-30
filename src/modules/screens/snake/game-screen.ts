@@ -46,52 +46,41 @@ export class SnakeGame implements GameScreen {
   }
 
   public handleKeyboardInput(event: KeyboardEvent): void {
+    const keyCode: number = event.keyCode;
     let isValidInput: boolean = false;
 
-    switch (event.keyCode) {
-      case 37: // left
+
+    if (this.gameState === GameState.ACTIVE) {
+      if (keyCode === 37) { // left
         if (this.lastKeyCode != 39) {
           this.snake.turn(-1, 0);
           isValidInput = true;
         } 
-
-        break;
-      
-      case 38: // up
+      } else if (keyCode === 38) { // up
         if (this.lastKeyCode != 40) {
           this.snake.turn(0, -1);
           isValidInput = true;
         }
-
-        break;
-
-      case 39: // right
+      } else if (keyCode === 39) { // right
         if (this.lastKeyCode != 37) {
           this.snake.turn(1, 0);
           isValidInput = true;
         }
-
-        break;
-
-      case 40: // down
+      } else if (keyCode === 40) { // down
         if (this.lastKeyCode != 38) {
           this.snake.turn(0, 1);
           isValidInput = true;
         }
-
-        break;
-
-      case 27: // esc
-        document.dispatchEvent(new CustomEvent('gameStateEvent', {detail: -1}));
-        break;
-
-      case 13: // enter
-        if (this.gameState === GameState.PAUSED) {
-          this.popup = null;
-          this.init();
-        }
-
-        break;
+      } 
+    }
+    
+    if (keyCode === 27) { // esc
+      document.dispatchEvent(new CustomEvent('gameStateEvent', {detail: -1}));      
+    } else if (keyCode === 13) {
+      if (this.gameState === GameState.PAUSED) { // enter
+        this.popup = null;
+        this.init();
+      }
     }
 
     if (isValidInput) {
@@ -100,37 +89,37 @@ export class SnakeGame implements GameScreen {
   }
 
   public update(timeDelta: number): void {
-    if (this.gameState === GameState.ACTIVE) {
-      // intersections
-      if (this.snake.intersects(this.food.getHitBox())) {
-        this.score += 5;
-        this.hud.setScore(this.score);
+    if (this.gameState !== GameState.ACTIVE) return;
 
-        this.replaceFood();
-        this.snake.grow();
+    // intersections
+    if (this.snake.intersects(this.food.getHitBox())) {
+      this.score += 5;
+      this.hud.setScore(this.score);
+
+      this.replaceFood();
+      this.snake.grow();
+    }
+
+    for (let hitBox of this.screenHitBox) {
+      if (this.snake.intersects(hitBox)) {
+        this.endGame();
       }
+    }
 
-      for (let hitBox of this.screenHitBox) {
-        if (this.snake.intersects(hitBox)) {
-          this.endGame();
-        }
+    for (let hitBox of this.snake.getTailHitBoxes()) {
+      if (this.snake.intersects(hitBox)) {
+        this.endGame();
       }
+    }
 
-      for (let hitBox of this.snake.getTailHitBoxes()) {
-        if (this.snake.intersects(hitBox)) {
-          this.endGame();
-        }
-      }
+    this.snake.update(timeDelta);      
+    
+    if (this.score - this.lastScore >= SPEED_UP_SCORE) {
+      const snakeSpeed: number = this.snake.getSpeed();
 
-      this.snake.update(timeDelta);      
-      
-      if (this.score - this.lastScore >= SPEED_UP_SCORE) {
-        const snakeSpeed: number = this.snake.getSpeed();
-
-        this.snake.setSpeed(snakeSpeed  + 1);
-        this.hud.setSpeed(snakeSpeed);
-        this.lastScore = this.score;
-      }
+      this.snake.setSpeed(snakeSpeed  + 1);
+      this.hud.setSpeed(snakeSpeed);
+      this.lastScore = this.score;
     }
   }
   
@@ -149,6 +138,7 @@ export class SnakeGame implements GameScreen {
   private init(): void {
     this.score = 0;
     this.lastScore = this.score;
+    this.lastKeyCode = 0;
 
     this.snake = new Snake(GAME_FIELD_WIDTH / 2, GAME_FIELD_HEIGHT / 2);
     this.food = new Food();
