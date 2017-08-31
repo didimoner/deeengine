@@ -134,7 +134,7 @@ export class SnakeGame implements GameScreen {
   }
 
   private replaceFood(): void {
-    let exclude: Coordinates[] = [this.snake.getPosition(), ...this.snake.getSnakeTilePositions()];
+    const exclude: Coordinates[] = [this.snake.getPosition(), ...this.snake.getSnakeTilePositions()];
 
     let x: number = 0;
     let y: number = 0;
@@ -182,7 +182,7 @@ export class SnakeGame implements GameScreen {
       CANVAS_HEIGHT /2,
       'Game Over',
       [
-        'Your result: ' + this.score.toString(), 
+        'Your result: ' + this.score.toString(10), 
         'Press Enter', 
         'to continue...'
       ]

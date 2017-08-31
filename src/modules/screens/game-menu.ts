@@ -67,7 +67,7 @@ export class GameMenu implements GameScreen {
   }
 
   private dispatchScreen(): void {
-    let event: CustomEvent = new CustomEvent('gameStateEvent', {
+    const event: CustomEvent = new CustomEvent('gameStateEvent', {
       detail: this.activeItem
     });
 

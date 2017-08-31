@@ -118,7 +118,7 @@ export class Snake extends BorderBox implements Entity {
   private updatePosition(): void {
     if (!this.direction.x && !this.direction.y) return;
 
-    let headLastPos: Coordinates = this.head.getPosition();
+    const headLastPos: Coordinates = this.head.getPosition();
 
     if (this.tail.length > 0) {
       for (let i = this.tail.length - 1; i > 0; i--) {

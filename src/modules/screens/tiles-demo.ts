@@ -18,13 +18,13 @@ export class TilesDemo implements GameScreen {
       }
     }
 
-    let pattern: string[] = [
+    const pattern: string[] = [
       ' 9 ', 
       '999', 
       ' 9',
       '9 9'
     ];
-    let pattern2: string[] = [
+    const pattern2: string[] = [
       '99', 
       '9 ', 
       '9 '

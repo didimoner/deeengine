@@ -59,11 +59,11 @@ class HudElement {
   private value: Text;
   
   constructor(title: string, value: number, yPosition: number) { 
-    let fontSize: number = 18;
-    let xPosition: number = GAME_FIELD_WIDTH * TILE_SIZE + 2;
+    const fontSize: number = 18;
+    const xPosition: number = GAME_FIELD_WIDTH * TILE_SIZE + 2;
 
     this.title = new Text(title, xPosition, yPosition, fontSize);
-    this.value = new Text(value.toString().padStart(5), xPosition, yPosition + fontSize, fontSize);
+    this.value = new Text(value.toString(10).padStart(5), xPosition, yPosition + fontSize, fontSize);
   }
 
   public draw(ctx: CanvasRenderingContext2D): void {
@@ -72,7 +72,7 @@ class HudElement {
   }
 
   public setValue(value: number): void {
-    this.value.setValue(value.toString().padStart(5));
+    this.value.setValue(value.toString(10).padStart(5));
   }
   public getValue(): number {
     return Number(this.value.getValue());

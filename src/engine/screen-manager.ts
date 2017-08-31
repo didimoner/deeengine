@@ -27,7 +27,7 @@ export class ScreenManager {
   }
 
   private changeScreen(event: CustomEvent) {
-    let gameIndex: number = event.detail;
+    const gameIndex: number = event.detail;
 
     if (gameIndex === -1) {
       this.activeScreen = this.gameMenu;

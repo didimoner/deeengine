@@ -24,7 +24,7 @@ export class Game {
 
   private update(): void {
     this.currTime = Date.now();
-    let timeDelta = (this.currTime - this.lastTime) / 1000;
+    const timeDelta = (this.currTime - this.lastTime) / 1000;
     this.lastTime = this.currTime;
 
     this.screenManager.update(timeDelta);
