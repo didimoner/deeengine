@@ -115,10 +115,8 @@ export class SnakeGame implements GameScreen {
     }      
     
     if (this.score - this.lastScore >= SPEED_UP_SCORE) {
-      const snakeSpeed: number = this.snake.getSpeed();
-
-      this.snake.setSpeed(snakeSpeed  + 1);
-      this.hud.setSpeed(snakeSpeed);
+      this.snake.setSpeed(this.snake.getSpeed()  + 1);
+      this.hud.setSpeed(this.snake.getSpeed());
       this.lastScore = this.score;
     }
   }
