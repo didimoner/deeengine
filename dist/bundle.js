@@ -241,14 +241,14 @@ var HudElement = (function () {
         var fontSize = 18;
         var xPosition = constants_1.GAME_FIELD_WIDTH * constants_1.TILE_SIZE + 2;
         this.title = new text_1.Text(title, xPosition, yPosition, fontSize);
-        this.value = new text_1.Text(value.toString().padStart(5), xPosition, yPosition + fontSize, fontSize);
+        this.value = new text_1.Text(value.toString(10).padStart(5), xPosition, yPosition + fontSize, fontSize);
     }
     HudElement.prototype.draw = function (ctx) {
         this.title.draw(ctx);
         this.value.draw(ctx);
     };
     HudElement.prototype.setValue = function (value) {
-        this.value.setValue(value.toString().padStart(5));
+        this.value.setValue(value.toString(10).padStart(5));
     };
     HudElement.prototype.getValue = function () {
         return Number(this.value.getValue());
@@ -321,6 +321,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var game_1 = __webpack_require__(8);
 __webpack_require__(21);
 __webpack_require__(22);
+__webpack_require__(23);
 var canvas = document.querySelector('#canvas');
 var game = new game_1.Game(canvas);
 game.run();
@@ -773,7 +774,7 @@ var SnakeGame = (function () {
         this.gameState = GameState.PAUSED;
         this.snake.setDirection(0, 0);
         this.popup = new pop_up_1.Popup(constants_1.CANVAS_WIDTH / 2, constants_1.CANVAS_HEIGHT / 2, 'Game Over', [
-            'Your result: ' + this.score.toString(),
+            'Your result: ' + this.score.toString(10),
             'Press Enter',
             'to continue...'
         ]);
@@ -1066,10 +1067,33 @@ exports.TileBackground = TileBackground;
 /* 21 */
 /***/ (function(module, exports) {
 
-// removed by extract-text-webpack-plugin
+// https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
+if (!String.prototype.padStart) {
+    String.prototype.padStart = function padStart(targetLength,padString) {
+        targetLength = targetLength>>0; //floor if number or convert non-number to 0;
+        padString = String(padString || ' ');
+        if (this.length > targetLength) {
+            return String(this);
+        }
+        else {
+            targetLength = targetLength-this.length;
+            if (targetLength > padString.length) {
+                padString += padString.repeat(targetLength/padString.length); //append to original to ensure we are longer than needed
+            }
+            return padString.slice(0,targetLength) + String(this);
+        }
+    };
+}
 
 /***/ }),
 /* 22 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 23 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
